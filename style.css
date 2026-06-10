@@ -1,0 +1,1615 @@
+/* ==========================================================================
+   CLIENT CONFIGURATION (THEME SETTINGS)
+   Update these variables to re-skin the entire website in seconds.
+   ========================================================================== */
+:root {
+    /* 1. BRAND COLORS */
+    --black: #000000;
+    --white: #ffffff;
+    --gold: #FF33CC; /* Softened Cyber Pink for Y2K Accent */
+
+    /* 2. BRAND FONTS */
+    --serif: 'Syne', sans-serif; /* Wide, chunky Y2K Display font */
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+    /* 3. SPACING */
+    --margin: 64px;
+    --gutter: 24px;
+
+    /* Theme-aware variables */
+    --bg: #FFFFFF; 
+    --text: #050505; 
+    --surface: #F0F0F0; 
+    --nav-bg: rgba(255, 255, 255, 0.6);
+    --dropdown-bg: #FFFFFF;
+    --alt-bg: #F4F4F4; 
+    --border-subtle: #050505; /* Solid black outlines */
+    --scrollbar-thumb: rgba(5, 5, 5, 0.3);
+}
+
+[data-theme="dark"] {
+    --bg: #050505;
+    --text: var(--white);
+    --surface: #1A1A1A;
+    --nav-bg: rgba(5, 5, 5, 0.6);
+    --dropdown-bg: #050505;
+    --alt-bg: #111111;
+    --border-subtle: #FFFFFF;
+    --gold: #00FFCC; /* Electric Cyan in dark mode */
+    --scrollbar-thumb: rgba(255, 255, 255, 0.3);
+}
+
+html {
+    width: 100%;
+    scrollbar-gutter: stable; /* Prevents layout shift when modals open */
+}
+
+/* Modern Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 6px;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 10px;
+    border: 1px solid transparent;
+    background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gold);
+    border: 1px solid transparent;
+    background-clip: padding-box;
+}
+
+/* Scroll Lock Engine */
+html.scroll-locked {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+html.scroll-locked::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
+
+body {
+    overflow-x: hidden;
+    width: 100%;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent; /* Removes the default mobile browser gray tap blink universally */
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 18px;
+    line-height: 1.5;
+    letter-spacing: -0.02em; /* Slightly tighter for body text */
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Premium Film Grain Overlay */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    /* SVG Noise generated via data URI for zero-latency loading */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.06'/%3E%3C/svg%3E");
+    opacity: 0.8;
+    mix-blend-mode: overlay;
+}
+
+/* Language Toggle Logic */
+/* Hide Thai elements by default */
+[lang="th"] { 
+    display: none !important; 
+}
+
+/* Toggle logic: target only elements with the explicit lang attribute */
+body.lang-th [lang="en"] { display: none !important; }
+body.lang-th [lang="th"] { display: block !important; }
+body.lang-th a[lang="th"], body.lang-th span[lang="th"] { display: inline-block !important; }
+
+h1, h2, .logo {
+    font-family: var(--serif);
+    font-weight: 800; /* Bold and chunky */
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+}
+
+h1 { font-size: clamp(48px, 6vw, 88px); line-height: 0.9; overflow-wrap: break-word; } /* Scaled down slightly to not overpower the image */
+h2 { font-size: 56px; margin-bottom: 64px; font-weight: 800; } 
+
+h3 { 
+    font-family: var(--sans); 
+    font-size: 22px; 
+    font-weight: 300; 
+    text-transform: uppercase; 
+    letter-spacing: 0.4em; 
+    margin-bottom: 32px; 
+    color: var(--text); 
+    opacity: 1; /* Ensures text stays strictly black on white backgrounds */
+}
+
+a { text-decoration: none; color: inherit; transition: opacity 0.3s ease, color 0.3s ease; }
+a:hover { opacity: 0.7; transition-delay: 0.1s; }
+
+/* Brand Logos Theme Adaptability */
+.brand-logo { 
+    transition: filter 0.5s ease; 
+    pointer-events: none; /* Foolproof kill switch: Blocks all click events and modal triggers */
+}
+[data-theme="dark"] .brand-logo { filter: invert(1) brightness(0.9); }
+
+/* Grid System */
+.container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 var(--margin);
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--gutter);
+}
+
+/* --- 2. NAVIGATION BAR --- */
+nav {
+    height: 72px; 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px; 
+    position: fixed;
+    top: 24px; /* Floating pill */
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: calc(100% - 48px);
+    max-width: 1440px;
+    z-index: 100;
+    border: 2px solid var(--border-subtle);
+    border-radius: 100px;
+    box-shadow: 4px 4px 0 var(--border-subtle);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+nav::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--nav-bg);
+    backdrop-filter: blur(15px);
+    z-index: -1;
+    pointer-events: none;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --- NAVIGATION ENTRANCE ANIMATION --- */
+@keyframes navEntrance {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.logo {
+    opacity: 0;
+    animation: navEntrance 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: 0.1s;
+}
+
+@media (min-width: 769px) {
+    .nav-links > * {
+        opacity: 0;
+        animation: navEntrance 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .nav-links > *:nth-child(1) { animation-delay: 0.2s; }
+    .nav-links > *:nth-child(2) { animation-delay: 0.3s; }
+    .nav-links > *:nth-child(3) { animation-delay: 0.4s; }
+    .nav-links > *:nth-child(4) { animation-delay: 0.5s; }
+    .nav-links > *:nth-child(5) { animation-delay: 0.6s; }
+}
+
+@keyframes heroFadeIn {
+    from { opacity: 0; transform: scale(1.1) translateZ(0); }
+    to { opacity: 1; transform: scale(1) translateZ(0); }
+}
+
+.nav-links {
+    display: flex;
+    gap: 16px; /* Tighter spacing between nav items */
+    font-size: 13px; /* Slightly larger font */
+    text-transform: uppercase;
+    letter-spacing: 0.25em; /* More spread out */
+    margin-left: auto; /* Pushes the nav-links to the right */
+    align-items: center;
+}
+
+.theme-toggle {
+    cursor: pointer;
+    opacity: 1;
+    font-weight: 600;
+    padding: 4px 10px 4px 14px; /* Optically centers text by offsetting the wide letter-spacing */
+    line-height: 1;
+    border-radius: 100px;
+    border: 2px solid var(--border-subtle);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+.lang-switch {
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Smoother grouping for the toggles */
+}
+
+.lang-switch span {
+    opacity: 0.6; /* Dim the inactive one */
+    font-weight: 600;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    padding: 4px 10px 4px 14px; /* Optically centers text */
+    line-height: 1; /* Tightens the internal spacing */
+    border-radius: 100px;
+    border: 2px solid transparent;
+}
+
+/* Highlight EN when active */
+body:not(.lang-th) .lang-switch .en {
+    opacity: 1;
+    font-weight: 800;
+    color: var(--black) !important;
+    background-color: var(--gold);
+    border-color: var(--black);
+    box-shadow: 2px 2px 0 var(--black);
+}
+body:not(.lang-th) .lang-switch .en:hover {
+    color: var(--black) !important;
+}
+
+/* Highlight TH when active */
+body.lang-th .lang-switch .th {
+    opacity: 1;
+    font-weight: 800;
+    color: var(--black) !important;
+    background-color: var(--gold);
+    border-color: var(--black);
+    box-shadow: 2px 2px 0 var(--black);
+}
+body.lang-th .lang-switch .th:hover {
+    color: var(--black) !important;
+}
+
+.logo, .nav-links a, .lang-switch {
+    color: var(--text);
+    transition: color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Prevent native mobile dragging and highlighting of navigation links */
+.logo, .nav-links a, .lang-switch span, .theme-toggle, .mobile-toggle {
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none;
+    user-select: none;
+}
+
+.nav-links > a, .dropdown-trigger {
+    padding: 4px 10px 4px 14px; /* Optically centers text */
+    line-height: 1;
+    border-radius: 100px;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.nav-links > a.active, .dropdown-trigger.active {
+    color: var(--black) !important;
+    background-color: var(--gold);
+    border-color: var(--black);
+    box-shadow: 2px 2px 0 var(--black);
+    font-weight: 800;
+}
+.nav-links > a.active:hover, .dropdown-trigger.active:hover {
+    color: var(--black) !important;
+}
+
+.back-to-top {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.4em;
+    z-index: 90;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    background: var(--nav-bg);
+    backdrop-filter: blur(10px);
+    padding: 16px 24px;
+    border: 2px solid var(--border-subtle);
+    border-radius: 100px;
+    box-shadow: 4px 4px 0 var(--border-subtle);
+    color: var(--text);
+    -webkit-tap-highlight-color: transparent;
+}
+.back-to-top.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+
+/* Homepage Hero State: Transparent background and white text when not scrolled */
+nav.on-hero:not(.scrolled) {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+}
+
+nav.on-hero:not(.scrolled)::before {
+    opacity: 0;
+    background: transparent;
+    backdrop-filter: none;
+}
+
+nav.on-hero:not(.scrolled) .logo,
+nav.on-hero:not(.scrolled) .nav-links a,
+nav.on-hero:not(.scrolled) .lang-switch,
+nav.on-hero:not(.scrolled) .theme-toggle {
+    color: var(--text);
+}
+
+/* Revert active items to a subtle outline pill on the transparent hero */
+body:not(.lang-th) nav.on-hero:not(.scrolled) .lang-switch .en,
+body.lang-th nav.on-hero:not(.scrolled) .lang-switch .th,
+nav.on-hero:not(.scrolled) .nav-links > a.active,
+nav.on-hero:not(.scrolled) .dropdown-trigger.active,
+nav.on-hero:not(.scrolled) .theme-toggle {
+    background-color: transparent;
+    border-color: var(--text);
+    box-shadow: none;
+    color: var(--text) !important;
+}
+
+body:not(.lang-th) nav.on-hero:not(.scrolled) .lang-switch .en:hover,
+body.lang-th nav.on-hero:not(.scrolled) .lang-switch .th:hover,
+nav.on-hero:not(.scrolled) .nav-links > a.active:hover,
+nav.on-hero:not(.scrolled) .dropdown-trigger.active:hover {
+    color: var(--gold) !important;
+    border-color: var(--gold);
+    background-color: transparent;
+    box-shadow: none;
+}
+
+/* Editorial Dropdown Styling */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-trigger {
+    display: inline-flex;
+    align-items: center;
+}
+
+.dropdown-trigger::after {
+    content: '▾';
+    margin-left: 8px;
+    font-size: 10px;
+    opacity: 0.5;
+    display: inline-block;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dropdown:hover .dropdown-trigger::after {
+    transform: rotate(180deg);
+    opacity: 1;
+    transition-delay: 0.1s;
+}
+
+.dropdown-content {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(8px); /* Tighter emergence */
+    background: var(--dropdown-bg);
+    backdrop-filter: blur(15px); /* Lighter blur */
+    min-width: 140px; /* Reduced width */
+    padding: 16px 0; /* Reduced padding */
+    border: 2px solid var(--border-subtle); /* Subtle attachment */
+    border-radius: 24px; /* Removed border radius */
+    box-shadow: 4px 4px 0 var(--border-subtle); /* Removed shadow */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
+    z-index: 101;
+}
+
+.dropdown:hover .dropdown-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0) scale(1);
+    transition-delay: 0.1s;
+}
+
+.dropdown-content a {
+    display: block !important; 
+    padding: 12px 14px 12px 18px; /* Optically centers text */
+    font-size: 10px;
+    text-align: center;
+    letter-spacing: 0.3em;
+    color: var(--text) !important; /* Ensure readability on theme background */
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.3s ease, transform 0.3s ease, color 0.3s ease;
+}
+
+.dropdown:hover .dropdown-content a {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Subtle staggered entrance for the text */
+.dropdown:hover .dropdown-content a:nth-child(1) { transition-delay: 0.15s; }
+.dropdown:hover .dropdown-content a:nth-child(2) { transition-delay: 0.2s; }
+.dropdown:hover .dropdown-content a:nth-child(3) { transition-delay: 0.25s; }
+.dropdown:hover .dropdown-content a:nth-child(4) { transition-delay: 0.3s; }
+.dropdown:hover .dropdown-content a:nth-child(5) { transition-delay: 0.35s; }
+
+.dropdown-content a.active {
+    color: var(--gold) !important;
+    font-weight: 600;
+}
+
+/* Hamburger Icon */
+.mobile-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    cursor: pointer;
+    position: relative;
+    z-index: 1001;
+    /* Mobile entrance animation */
+    opacity: 0;
+    animation: navEntrance 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: 0.2s;
+}
+
+.mobile-toggle span {
+    width: 22px;
+    height: 1px;
+    background-color: currentColor;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-book {
+    border: 0.5px solid var(--black); /* Keep thin border */
+    padding: 12px 24px; /* Slightly more padding */
+    font-size: 13px; /* Slightly smaller font */
+    text-transform: uppercase;
+    letter-spacing: 0.15em; /* Refined letter spacing */
+}
+
+/* --- 3. HOMEPAGE SPECIFIC SECTIONS --- */
+.hero {
+    height: 100vh;
+    display: flex;
+    align-items: flex-end;
+    padding: var(--margin);
+    position: relative;
+    overflow: hidden; /* Necessary for the scale effect */
+    background-color: var(--bg);
+}
+
+.hero::before {
+    /* Y2K Grid / Noise Background (Placeholder overlay) */
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(var(--border-subtle) 1px, transparent 0);
+    background-size: 24px 24px;
+    opacity: 0.1;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.hero-bg {
+    position: absolute;
+    inset: 32px;
+    background-color: #ccc;
+    background-repeat: no-repeat;
+    background-position: center 10%;
+    background-size: cover;
+    z-index: 0;
+    border: 2px solid var(--border-subtle);
+    border-radius: 40px;
+    box-shadow: 8px 8px 0 var(--border-subtle);
+    transform-origin: center 20%;
+    opacity: 1;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    will-change: transform; /* Offloads parallax strictly to the GPU */
+}
+
+.hero:not(.loaded) .hero-bg {
+    opacity: 0; /* Hide strictly while waiting for the JS gatekeeper */
+}
+
+.hero.loaded .hero-bg {
+    animation: heroFadeIn 2.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.hero-content p {
+    text-transform: uppercase; /* Keep uppercase */
+    letter-spacing: 0.2em; /* More spread out */
+    font-size: 14px;
+    margin-bottom: 12px;
+    color: var(--bg);
+    font-weight: 800;
+    text-shadow: 3px 3px 0 var(--text);
+}
+
+/* --- Y2K SCROLLING MARQUEE --- */
+.hero-marquee {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 48px);
+    max-width: 1440px;
+    overflow: hidden;
+    background: var(--nav-bg);
+    backdrop-filter: blur(15px);
+    border: 2px solid var(--border-subtle);
+    border-radius: 100px;
+    box-shadow: 4px 4px 0 var(--border-subtle);
+    padding: 16px 0;
+    z-index: 10;
+    display: flex;
+    white-space: nowrap;
+}
+
+.hero-marquee-track {
+    display: flex;
+    animation: marqueeScroll 15s linear infinite;
+}
+
+.hero-marquee:hover .hero-marquee-track {
+    animation-play-state: paused;
+}
+
+.hero-marquee-track span {
+    font-family: var(--sans);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-size: 12px;
+    color: var(--text);
+    padding: 0 32px;
+}
+
+@keyframes marqueeScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* --- Y2K SCROLL INDICATOR --- */
+.scroll-indicator {
+    position: absolute;
+    bottom: 112px; /* Sits perfectly above the marquee on the hero */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    color: var(--bg);
+    text-shadow: 2px 2px 0 var(--text);
+    animation: fadeInArrow 0.5s ease-out forwards 0.8s, bounceArrow 2s infinite ease-in-out 1.3s;
+    transition: color 0.15s ease;
+    cursor: pointer;
+}
+
+.scroll-indicator::after {
+    content: '↓';
+    font-family: var(--sans);
+    font-weight: 800;
+    font-size: 24px;
+}
+
+@keyframes fadeInArrow {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes bounceArrow {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+}
+
+.scroll-indicator:hover {
+    color: var(--gold);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    width: fit-content;
+    max-width: 100%;
+    margin-left: 4vw; 
+    margin-bottom: 12vh;
+}
+
+.hero-content h1 {
+    color: var(--bg);
+    text-shadow: 6px 6px 0 var(--text);
+}
+
+.hero-tagline {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5em; /* Editorial wide tracking */
+    opacity: 1;
+    margin-top: 24px; 
+    position: relative;
+}
+
+/* Subtle Line Separator */
+.hero-tagline::before {
+    content: '';
+    position: absolute;
+    top: -12px; /* Positioned exactly in the middle of the gap */
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--text);
+    opacity: 1;
+    transition: width 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s; /* Synchronized with delay-1 */
+}
+
+/* Ensures tagline maintains its editorial softness after reveal */
+.hero-tagline.reveal.active {
+    opacity: 0.7;
+}
+
+.hero-tagline.reveal.active::before {
+    width: 40px;
+}
+
+.hero-btns {
+    margin-top: 32px;
+    display: flex;
+    gap: 24px;
+}
+
+.btn-primary, .btn-secondary, .btn-bold {
+    border-radius: 100px;
+    font-family: var(--serif);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 2px solid var(--border-subtle);
+    box-shadow: 4px 4px 0 var(--border-subtle);
+    transition: all 0.2s ease;
+    -webkit-tap-highlight-color: transparent; /* Removes the default browser gray blink */
+}
+
+.btn-primary { background: var(--gold); color: var(--black); border-color: var(--black); box-shadow: 4px 4px 0 var(--black); padding: 16px 44px 16px 52px; font-size: 14px; }
+.btn-secondary { background: var(--bg); color: var(--text); padding: 16px 44px 16px 52px; font-size: 14px; }
+
+@media (hover: hover) {
+    .back-to-top:hover { 
+        background: var(--gold);
+        color: var(--black) !important;
+        border-color: var(--black);
+        transform: translate(-2px, -2px) !important;
+        box-shadow: 6px 6px 0 var(--black);
+        opacity: 1;
+    }
+
+    .logo:hover, 
+    .nav-links a:hover, 
+    .lang-switch span:hover {
+        color: var(--gold) !important;
+        opacity: 1;
+    }
+
+    .theme-toggle:hover {
+        opacity: 1;
+        color: var(--black) !important;
+        background-color: var(--gold);
+        border-color: var(--black);
+        box-shadow: 2px 2px 0 var(--black);
+    }
+
+    .btn-primary:hover {
+        transform: translate(-2px, -2px) !important;
+        box-shadow: 6px 6px 0 var(--black);
+        opacity: 1;
+    }
+
+    .btn-secondary:hover, .btn-bold:hover {
+        background: var(--gold);
+        color: var(--black);
+        border-color: var(--black);
+        transform: translate(-2px, -2px) !important;
+        box-shadow: 6px 6px 0 var(--black);
+        opacity: 1;
+    }
+
+    /* Image Y2K Hovers - Isolated to devices with actual mice so mobile long-press saves don't get interrupted */
+    .featured-item:hover,
+    .full-grid img:hover,
+    .video-item:hover,
+    .digitals-grid img:hover {
+        transform: translate(-4px, -4px) !important;
+        box-shadow: 8px 8px 0 var(--text);
+        border-color: var(--text);
+    }
+    
+    .full-grid img:hover {
+        z-index: 2; 
+    }
+
+    /* Prevent visual drop-glitch when opening modals */
+    .freeze-hover {
+        transform: translate(-4px, -4px) !important;
+        box-shadow: 8px 8px 0 var(--text) !important;
+        border-color: var(--text) !important;
+        z-index: 2 !important;
+    }
+
+}
+
+/* Momentary "Blink" effect on click/tap */
+.btn-primary:active, .btn-bold:active {
+    background: var(--gold) !important; 
+    color: var(--black) !important; 
+    transform: scale(0.97) !important;
+    transition: none; 
+}
+
+.btn-secondary:active {
+    border-color: var(--gold) !important; /* The white border blinks gold */
+    color: var(--gold) !important; /* The white text blinks gold */
+    background: transparent !important; /* The background stays empty */
+    transform: scale(0.97) !important;
+    transition: none;
+}
+
+.back-to-top:active {
+    background: var(--gold) !important; 
+    border-color: var(--black) !important;
+    color: var(--black) !important; 
+    transform: scale(0.97) !important;
+    transition: none;
+}
+
+.lang-switch span:active, .theme-toggle:active {
+    opacity: 1 !important;
+    transform: scale(0.95) !important;
+    transition: none;
+}
+
+/* Sections */
+section { 
+    padding: 96px 0; 
+    border-top: none;
+    width: 100%;
+    position: relative;
+    scroll-margin-top: 120px; /* Accounts for floating pill header height */
+}
+
+/* --- ANIMATIONS --- */
+
+.reveal {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.reveal:not(.reveal-done) {
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Staggered Reveal Delays */
+.reveal.delay-1 { transition-delay: 0.15s; }
+.reveal.delay-2 { transition-delay: 0.3s; }
+.reveal.delay-3 { transition-delay: 0.45s; }
+.reveal.delay-4 { transition-delay: 0.6s; }
+
+.bg-alt {
+    background-color: var(--alt-bg); /* Theme-aware background */
+}
+
+#highlights .container {
+    max-width: 1600px;
+}
+
+.featured-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--gutter);
+    contain: layout; /* Helps Safari performance and stability */
+}
+
+.featured-item {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    background-color: var(--surface);
+    aspect-ratio: 3 / 4; /* Eliminates layout thrashing by holding the shape while loading */
+    border-radius: 24px;
+    border: 2px solid var(--border-subtle);
+    box-shadow: 4px 4px 0 var(--border-subtle);
+    will-change: transform, opacity; /* Pre-allocates memory for smooth entrance reveal */
+    transition: transform 0.05s ease, box-shadow 0.05s ease, border-color 0.05s ease;
+}
+
+.featured-item img {
+    width: 100%; 
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    position: relative;
+    z-index: 1;
+    background-color: var(--surface);
+    will-change: transform, opacity; /* Pre-allocates memory for hover state and smooth reveal */
+    transition: filter 0.05s ease;
+}
+
+.full-grid {
+    display: flex;
+    gap: 48px; /* Reduced from 80px for a tighter editorial look */
+    align-items: flex-start;
+}
+
+.portfolio-column {
+    flex: 1;
+    display: flex;
+    gap: 16px;
+    align-items: start;
+}
+
+.masonry-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.full-grid img { 
+    width: 100%; 
+    height: auto;
+    display: block;
+    background-color: var(--surface);
+    position: relative;
+    z-index: 1; /* Establishes clean stacking context */
+    border-radius: 24px;
+    border: 2px solid var(--border-subtle);
+    box-shadow: 4px 4px 0 var(--border-subtle);
+    will-change: transform, opacity, box-shadow; /* Eliminates hover stutter and smooths entrance reveal */
+    transition: transform 0.05s ease, box-shadow 0.05s ease, border-color 0.05s ease;
+}
+
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--gutter);
+    align-items: start;
+}
+
+.video-item {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+    border: 2px solid var(--border-subtle);
+    box-shadow: 4px 4px 0 var(--border-subtle);
+    will-change: transform, opacity; /* Smooths entrance reveal */
+    transition: transform 0.05s ease, box-shadow 0.05s ease, border-color 0.05s ease;
+}
+
+.video-grid video, .video-grid iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: var(--surface);
+    object-fit: cover;
+    display: block;
+    position: relative;
+    z-index: 1;
+}
+
+.digitals-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--gutter);
+    contain: layout; /* Locks the grid geometry to prevent JS sorting scramble */
+}
+.digitals-grid img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    background-color: var(--surface);
+    filter: none; /* Digitals stay raw/natural */
+    display: block;
+    position: relative;
+    z-index: 1;
+    border-radius: 24px;
+    border: 2px solid var(--border-subtle);
+    box-shadow: 4px 4px 0 var(--border-subtle);
+    will-change: transform, opacity; /* Hardware acceleration for smooth sweep */
+    transition: transform 0.05s ease, box-shadow 0.05s ease, border-color 0.05s ease;
+}
+
+/* Section Labels for UX */
+.section-label {
+    grid-column: span 12;
+    font-family: var(--serif);
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    opacity: 1; /* Ensures labels stay strictly black on white backgrounds */
+    margin-bottom: 48px; 
+    text-align: left; /* Shift from center to left for editorial feel */
+    padding-left: 24px; /* Subtle offset */
+}
+
+.section-label {
+    position: relative; /* Needed for absolute positioning of pseudo-elements */
+    padding-bottom: 24px; /* Space for the line below */
+}
+
+.section-label::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 24px; /* Match padding */
+    width: 120px;
+    height: 1px;
+    background: linear-gradient(to right, var(--text), transparent); /* Fade out to the right */
+    opacity: 0.3;
+}
+
+.section-label::after { content: none; }
+
+/* Center alignment override for Measurements */
+#measurements .section-label {
+    text-align: center;
+    padding-left: 0;
+}
+#measurements .section-label::before {
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(to right, transparent, var(--text), transparent); /* Fade evenly */
+}
+
+/* --- 5. SUBPAGE HEADERS (Independent from Homepage) --- */
+.page-header {
+    font-family: var(--serif);
+    font-size: 64px;
+    font-style: normal;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    text-align: left;
+    margin-bottom: 48px;
+    position: relative;
+    padding-bottom: 24px;
+}
+
+.page-header::before {
+    display: none;
+}
+
+.page-description {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 20px;
+    line-height: 1.6;
+    opacity: 0.9; /* Subtle softness but maintains black character */
+    color: var(--text);
+    text-align: left;
+}
+
+.editorial-quote {
+    font-family: var(--serif);
+    font-style: normal;
+    font-weight: 800;
+    font-size: 40px;
+    line-height: 1.6;
+    color: var(--text);
+    text-align: center;
+}
+
+.editorial-quote::before,
+.editorial-quote::after {
+    color: var(--gold);
+    opacity: 0.7;
+    font-size: 1.2em;
+    transition: opacity 0.3s ease;
+}
+
+.editorial-quote::before { content: '“'; margin-right: 8px; }
+.editorial-quote::after { content: '”'; margin-left: 8px; }
+
+#measurements {
+    padding: 48px 0;
+}
+
+.info-strip {
+    padding: 24px 0;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    font-family: var(--sans);
+    font-style: normal;
+    font-size: 18px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+/* --- 4. CALL TO ACTION & FOOTER --- */
+.cta-section {
+    text-align: center;
+    padding: 160px 0;
+    border-top: 2px solid var(--border-subtle);
+}
+
+.btn-bold {
+    display: inline-block; background: var(--surface); color: var(--text); padding: 16px 44px 16px 52px; font-size: 14px; margin: 0;
+}
+
+.contact-list {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+}
+
+.contact-list .btn-bold {
+    min-width: 160px; /* More compact for a single-row feel */
+}
+
+/* --- 5. PAGE SPECIFIC LAYOUTS (About & Booking) --- */
+.split-layout {
+    display: flex;
+    gap: 96px;
+    align-items: flex-start;
+}
+.split-layout img { 
+    width: 40%; 
+    height: auto; 
+    border-radius: 24px;
+    border: 2px solid var(--border-subtle);
+    box-shadow: 4px 4px 0 var(--border-subtle);
+}
+.split-layout .bio { 
+    width: 50%; 
+    font-family: var(--sans); 
+    font-size: 18px; 
+    line-height: 1.8; 
+    color: var(--text); 
+    text-align: left;
+    margin-top: 0;
+}
+.split-layout .bio p { margin-bottom: 32px; }
+.split-layout .bio p:last-child { margin-bottom: 0; }
+
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(5px);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modal-content {
+    margin: auto;
+    display: block;
+    max-width: 90%;
+    max-height: 90%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    object-fit: contain;
+    cursor: default; /* Overrides the parent pointer to tell the browser it's not a button */
+    -webkit-touch-callout: default; /* Explicitly forces the long-press 'Save Image' menu on iOS */
+}
+
+/* Modal Navigation */
+.modal-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--white);
+    font-size: 32px;
+    font-weight: 300;
+    cursor: pointer;
+    padding: 48px;
+    user-select: none;
+    z-index: 2001;
+    transition: opacity 0.3s;
+}
+.modal-nav:hover { opacity: 0.5; transition-delay: 0.1s; }
+.modal-prev { left: 0; }
+.modal-next { right: 0; }
+
+@media (max-width: 390px) {
+    .modal-nav { padding: 20px; font-size: 24px; }
+}
+
+footer {
+    padding: 128px 0 64px;
+    background-color: var(--bg);
+    color: var(--text);
+    border-top: 2px solid var(--border-subtle);
+    margin-top: 0;
+}
+
+.footer-column {
+    grid-column: span 4;
+}
+
+.footer-label {
+    font-family: var(--serif);
+    font-style: normal;
+    font-weight: 800;
+    font-size: 32px;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 32px;
+}
+
+.footer-column a, .footer-column p {
+    color: var(--text);
+    font-family: var(--sans);
+}
+
+.footer-column p {
+    display: block;
+    margin-bottom: 16px;
+}
+
+.footer-column a {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 100px;
+    border: 2px solid var(--border-subtle);
+    font-weight: 700;
+    margin-bottom: 12px;
+    margin-right: 8px;
+    transition: all 0.15s ease;
+}
+
+.footer-column a:hover {
+    color: var(--black) !important;
+    background-color: var(--gold);
+    border-color: var(--black);
+    box-shadow: 4px 4px 0 var(--black);
+    transform: translate(-2px, -2px) !important;
+    opacity: 1;
+}
+
+.footer-bottom {
+    grid-column: span 12;
+    text-align: center;
+    font-size: 10px;
+    color: var(--text);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    padding-top: 16px;
+    margin-top: 24px;
+    border-top: 2px solid var(--border-subtle);
+}
+
+.footer-bottom .attribution {
+    margin-top: 8px;
+}
+
+.footer-bottom .designer-link {
+    display: inline;
+    border-bottom: 2px solid var(--text);
+    transition: all 0.15s ease;
+}
+
+.footer-bottom .designer-link:hover {
+    color: var(--black);
+    background-color: var(--gold);
+    border-bottom-color: transparent;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+/* --- 6. GLOBAL RESPONSIVENESS --- */
+
+/* Tablet & Small Laptops (1024px and below) */
+@media (max-width: 1024px) {
+    :root { --margin: 64px; }
+    h1 { font-size: 80px; }
+    .featured-grid { grid-template-columns: repeat(2, 1fr); } /* Changed from 3 to 2 to ensure symmetry for 4 images */
+
+    /* Trigger Mobile Hamburger Menu on Tablets */
+    .mobile-toggle { display: flex; }
+
+    nav {
+        transform: translateZ(0); /* Guarantees nav is consistently the containing block across all scroll states */
+    }
+
+    nav.nav-open {
+        border-color: transparent;
+        box-shadow: none;
+    }
+    nav.nav-open::before {
+        opacity: 0;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: -24px;
+        left: -24px;
+        transform: translateX(100%);
+        width: calc(100% + 48px);
+        height: 100vh;
+        background: var(--nav-bg);
+        backdrop-filter: blur(15px); /* Reduced for buttery smooth mobile entrance */
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 16px;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); /* Faster snap */
+        z-index: 1000;
+        padding: 96px 48px;
+        margin-left: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+        overscroll-behavior: contain; /* Stops background page drag */
+        touch-action: pan-y; /* Locks gestures strictly to vertical to prevent horizontal sliding */
+    }
+
+    nav.nav-open .nav-links { transform: translateX(0); }
+    nav.nav-open .logo { color: var(--text) !important; position: relative; z-index: 1001; }
+    nav.nav-open .mobile-toggle span { background-color: var(--text) !important; }
+    nav.nav-open .nav-links a,
+    nav.nav-open .lang-switch,
+    nav.nav-open .theme-toggle { color: var(--text) !important; }
+    
+    /* Ensure active pages, active dropdowns, and active language toggles get a transparent outline pill regardless of menu state */
+    nav .nav-links a.active,
+    nav .dropdown-trigger.active,
+    body:not(.lang-th) nav .lang-switch .en,
+    body.lang-th nav .lang-switch .th { 
+        color: var(--text) !important; 
+        background-color: transparent !important;
+        border-color: var(--text) !important;
+        box-shadow: none !important;
+    }
+
+    /* Remove pink hover/tap states entirely from the mobile menu */
+    nav .logo:hover,
+    nav .logo:active {
+        color: var(--text) !important;
+    }
+
+    nav .nav-links a:hover,
+    nav .nav-links a:active,
+    nav .dropdown-trigger:hover,
+    nav .dropdown-trigger:active,
+    nav .dropdown-content a:hover,
+    nav .dropdown-content a:active,
+    nav .lang-switch span:hover,
+    nav .lang-switch span:active,
+    nav .theme-toggle:hover,
+    nav .theme-toggle:active {
+        color: var(--text) !important;
+        background-color: transparent !important;
+        border-color: var(--text) !important;
+        box-shadow: none !important;
+        transform: none !important;
+    }
+
+    /* Neutralize high-specificity desktop overrides on the transparent hero */
+    body:not(.lang-th) nav.on-hero:not(.scrolled) .lang-switch .en:hover,
+    body.lang-th nav.on-hero:not(.scrolled) .lang-switch .th:hover,
+    nav.on-hero:not(.scrolled) .nav-links > a.active:hover,
+    nav.on-hero:not(.scrolled) .dropdown-trigger.active:hover {
+        color: var(--text) !important;
+        border-color: var(--text) !important;
+        background-color: transparent !important;
+        box-shadow: none !important;
+        transform: none !important;
+    }
+
+    /* Animate Hamburger to X */
+    nav.nav-open .mobile-toggle span:nth-child(1) { transform: translateY(4.5px) rotate(45deg); }
+    nav.nav-open .mobile-toggle span:nth-child(2) { transform: translateY(-4.5px) rotate(-45deg); }
+
+    .dropdown { width: 100%; display: flex; flex-direction: column; align-items: center; }
+
+    /* Editorial Mobile Typography */
+    .nav-links > a, .dropdown-trigger {
+        font-family: var(--serif) !important;
+        font-size: 24px !important;
+        font-style: italic;
+        text-transform: capitalize !important;
+        letter-spacing: 0.1em !important;
+        color: var(--text);
+        display: flex !important;
+        justify-content: center;
+        width: 100%;
+    }
+
+    /* Animation for links when menu opens */
+    .nav-links > * {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.2s ease, transform 0s 0.3s, color 0s 0.3s !important;
+    }
+
+    nav.nav-open .nav-links > * { opacity: 1; transform: translateY(0); transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), color 0.6s ease !important; }
+    nav.nav-open .nav-links > *:nth-child(1) { transition-delay: 0.1s; }
+    nav.nav-open .nav-links > *:nth-child(2) { transition-delay: 0.2s; }
+    nav.nav-open .nav-links > *:nth-child(3) { transition-delay: 0.3s; }
+    nav.nav-open .nav-links > *:nth-child(4) { transition-delay: 0.4s; }
+    nav.nav-open .nav-links > *:nth-child(5) { transition-delay: 0.5s; }
+
+    /* Show sub-links on mobile as a clean, flat list without the "brick" container */
+    .dropdown-content {
+        position: static;
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        opacity: 1;
+        visibility: visible;
+        transform: none !important; /* Overrides the desktop hover shift that jolts the block left */
+        background: transparent;
+        backdrop-filter: none;
+        box-shadow: none;
+        border: none;
+        padding: 8px 0 16px 0;
+    }
+
+    .dropdown-content a { font-size: 11px !important; text-transform: uppercase !important; letter-spacing: 0.3em !important; opacity: 0.4; padding: 4px 10px 4px 14px !important; border: 2px solid transparent; border-radius: 100px; transform: none !important; transition-delay: 0s !important; }
+    .dropdown-content a.active { opacity: 1 !important; color: var(--text) !important; border-color: var(--text); }
+    .lang-switch { margin-top: 24px; font-size: 14px; }
+    .dropdown-trigger::after { display: none; }
+
+    /* Balancing About Page for Tablet/Small Laptops */
+    .split-layout { gap: 48px; }
+    .split-layout img { width: 48%; }
+    .split-layout .bio { width: 48%; font-size: 20px; }
+    .split-layout .bio { margin-top: 48px; }
+
+    /* Cal.com Widget & Booking Layout Adjustments for Tablets and below */
+    [id="my-cal-inline-booking-request"] { min-height: 600px !important; margin-top: 48px !important; }
+    .inquiry-section { margin-top: 64px !important; }
+}
+
+/* Small Tablets & Large Mobiles (768px and below) */
+@media (max-width: 768px) {
+    :root { --margin: 48px; --gutter: 16px; }
+    
+    /* Y2K Adjustments for Tablet */
+    nav { top: 16px; width: calc(100% - 32px); padding: 0 24px; }
+    .hero-bg { inset: 16px; border-radius: 32px; box-shadow: 6px 6px 0 var(--border-subtle); }
+    .hero-content { margin-bottom: 14vh; padding: 24px 32px; }
+    .hero-marquee { bottom: 16px; width: calc(100% - 32px); padding: 12px 0; }
+    .scroll-indicator { bottom: 88px; }
+
+    h1 { font-size: 64px; }
+    h2 { font-size: 36px; margin-bottom: 48px; }
+    .page-header { font-size: 38px; }
+    
+    .container { grid-template-columns: 1fr; } /* Simplifies layout for tablets */
+
+    nav { padding: 0 24px; }
+
+    /* Grids */
+    .featured-grid { grid-template-columns: repeat(2, 1fr); }
+    .full-grid { gap: 24px; }
+    .portfolio-column { gap: 16px; }
+    .video-grid { grid-template-columns: 1fr; }
+    
+    /* About Page Bio */
+    .split-layout { flex-direction: column; gap: 48px; }
+    .split-layout img, .split-layout .bio { width: 100%; }
+    .split-layout .bio { margin-top: 0; } /* Reset stagger on mobile */
+    .split-layout .bio { font-size: 18px; }
+    
+    /* Editorial Box Overrides */
+    [style*="padding: 100px"] { padding: 64px 24px !important; }
+    .editorial-quote { font-size: 24px; }
+
+    /* Client Logos */
+    [style*="gap: 120px"] { gap: 64px !important; }
+}
+
+/* Standard Mobile (480px and below) */
+@media (max-width: 480px) {
+    :root { --margin: 24px; }
+    
+    /* Y2K Adjustments for Mobile */
+    nav { top: 12px; width: calc(100% - 24px); height: 60px; padding: 0 16px; border-radius: 100px; }
+    .hero-bg { inset: 12px; border-radius: 24px; box-shadow: 4px 4px 0 var(--border-subtle); }
+    .hero-content { margin-left: 0; padding: 16px 24px; border-radius: 24px; margin-bottom: 14vh; }
+    .hero-marquee { bottom: 12px; width: calc(100% - 24px); padding: 8px 0; }
+    .hero-marquee-track span { font-size: 10px; padding: 0 16px; }
+    .scroll-indicator { bottom: 72px; transform: translateX(-50%) scale(0.8); } /* Shrinks bouncy arrow proportionately */
+
+    h1 { font-size: 40px; line-height: 1; letter-spacing: 0.02em; text-shadow: 3px 3px 0 var(--text); } 
+    .hero-tagline { font-size: 11px; letter-spacing: 0.3em; }
+    .page-header { font-size: 32px; margin-bottom: 32px; } /* Scales down subpage titles */
+    
+    .btn-book { padding: 8px 16px; font-size: 12px; }
+    
+    .hero-btns { flex-direction: column; gap: 16px; }
+    .btn-primary, .btn-secondary { padding: 12px 24px; font-size: 12px; letter-spacing: 0.2em; }
+
+    section { padding: 48px 0; } /* Tighter vertical rhythm */
+    .section-label { font-size: 24px; padding-bottom: 16px; padding-left: 16px; }
+    .section-label::before { width: 60px; left: 16px; }
+    .section-label { margin-bottom: 24px; } /* Reduced from 48px */
+
+    /* Grid Resets */
+    .featured-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; } /* 2 columns for less scrolling */
+    
+    /* Revert to stable CSS Columns for mobile masonry */
+    .full-grid { 
+        display: block; 
+        column-count: 2; 
+        column-gap: 16px; 
+    } 
+    .portfolio-column, .masonry-col { display: contents; } 
+    .full-grid img { margin-bottom: 16px; }
+
+    /* Measurements */
+    .info-strip { flex-wrap: wrap; gap: 16px; padding: 16px 0; font-size: 14px; }
+    
+    /* CTA & Footer */
+    .cta-section { padding: 96px 0; }
+    .btn-bold { min-width: unset; width: 70%; margin: 24px auto 0 auto; font-size: 12px; letter-spacing: 0.25em; padding: 12px 10px 12px 14px; }
+    
+    footer { padding: 96px 0 96px; }
+
+    /* Digitals Grid Fix */
+    .digitals-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+    /* Refine Bio Readability */
+    .split-layout .bio { 
+        font-size: 17px; 
+        line-height: 1.7; 
+    }
+
+    .footer-column, .footer-bottom { grid-column: span 1; }
+    .footer-label { margin-bottom: 24px; font-size: 18px; }
+
+    .contact-list { 
+        display: grid; 
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 16px; 
+    }
+    .contact-list .btn-bold { min-width: unset; width: 100%; margin: 0; font-size: 11px; letter-spacing: 0.2em; padding: 12px 10px 12px 14px; }
+
+    .back-to-top {
+        bottom: 24px;
+        right: 24px;
+        padding: 12px 16px;
+        font-size: 9px;
+    }
+}
+
+/* --- 7. CUSTOM CURSOR --- */
+@media (hover: hover) {
+    /* Hide default cursor universally to prevent native pointers from showing */
+    *, *::before, *::after {
+        cursor: none !important;
+    }
+
+    .cursor-dot {
+        width: 8px;
+        height: 8px;
+        background-color: var(--gold);
+        border-radius: 50%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: 99999;
+        transform: translate(-50%, -50%);
+        transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+        will-change: transform, width, height;
+    }
+
+    .cursor-dot.hover {
+        width: 40px;
+        height: 40px;
+        background-color: transparent;
+        border: 1px solid var(--gold);
+    }
+}
+
+/* --- 8. NATIVE APP TRANSITION ENGINE --- */
+.app-transition-curtain {
+    position: fixed;
+    inset: 0;
+    background-color: var(--bg);
+    z-index: 9999999;
+    pointer-events: none;
+    transform: translateY(100%); /* Default state: hidden below the screen */
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.app-transition-curtain.start-covered {
+    transform: translateY(0);
+    transition: none; /* Instantly covers the screen to hide browser flashes */
+}
+
+.page-entrance section, .page-entrance header, .page-entrance footer {
+    animation: pageContentSlideUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes pageContentSlideUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- SPLASH SCREEN --- */
+.splash-screen {
+    position: fixed;
+    inset: 0;
+    background-color: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
+}
+
+.splash-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.splash-logo {
+    font-family: var(--serif);
+    font-size: clamp(24px, 4vw, 48px);
+    font-weight: 800;
+    color: var(--text);
+}

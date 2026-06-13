@@ -9,8 +9,8 @@ window.CLIENT_CONFIG = {
     email: "contact@client.com",
     
     // 2. Roles / Taglines
-    taglineEn: "Model · Creative Director",
-    taglineTh: "นางแบบ · ครีเอทีฟไดเรกเตอร์",
+    taglineEn: "Model <span class=\"pink-accent\">·</span> Creative Director",
+    taglineTh: "นางแบบ <span class=\"pink-accent\">·</span> ครีเอทีฟไดเรกเตอร์",
 
     // 3. About / Footer Short Description
     footerDescEn: "International model and creative director based in Bangkok, specializing in high-end editorial and commercial campaigns.",

@@ -453,10 +453,14 @@
             const el = document.getElementById(id);
             if (el) el.textContent = value;
         };
+        const injectHTML = (id, value) => {
+            const el = document.getElementById(id);
+            if (el) el.innerHTML = value;
+        };
 
         inject('clientNameHero', window.CLIENT_CONFIG.name);
-        inject('taglineEn', window.CLIENT_CONFIG.taglineEn);
-        inject('taglineTh', window.CLIENT_CONFIG.taglineTh);
+        injectHTML('taglineEn', window.CLIENT_CONFIG.taglineEn);
+        injectHTML('taglineTh', window.CLIENT_CONFIG.taglineTh);
         
         if (window.CLIENT_CONFIG.measurements) {
             inject('val-height', window.CLIENT_CONFIG.measurements.height);

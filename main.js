@@ -434,16 +434,22 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.classList.toggle('has-caption', shouldShowCaption);
             modalCaption.classList.toggle('visible', shouldShowCaption);
             modalCaption.setAttribute('aria-hidden', shouldShowCaption ? 'false' : 'true');
-            if (modal.classList.contains('show-modal')) modalImg.style.transform = getModalRestTransform();
             if (!shouldShowCaption) {
                 if (modalCaptionKicker) modalCaptionKicker.textContent = '';
                 if (modalCaptionEn) modalCaptionEn.textContent = '';
                 if (modalCaptionTh) modalCaptionTh.textContent = '';
+                modal.style.setProperty('--modal-caption-height', '0px');
+                if (modal.classList.contains('show-modal')) modalImg.style.transform = getModalRestTransform();
                 return;
             }
             if (modalCaptionKicker) modalCaptionKicker.textContent = caption.kicker || '';
             if (modalCaptionEn) modalCaptionEn.textContent = caption.en || '';
             if (modalCaptionTh) modalCaptionTh.textContent = caption.th || caption.en || '';
+            requestAnimationFrame(() => {
+                const captionHeight = modalCaption.classList.contains('visible') ? Math.ceil(modalCaption.getBoundingClientRect().height) : 0;
+                modal.style.setProperty('--modal-caption-height', `${captionHeight}px`);
+                if (modal.classList.contains('show-modal')) modalImg.style.transform = getModalRestTransform();
+            });
         };
         const syncFullscreenToggle = () => {
             modalIsImmersive = !!document.fullscreenElement || modal.classList.contains('is-immersive');
@@ -541,6 +547,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const closeModal = () => {
             exitImmersiveMode();
             modal.classList.remove('show-modal', 'has-caption', 'has-caption-controls');
+            modal.style.removeProperty('--modal-caption-height');
             if (modalCaption) modalCaption.classList.remove('visible');
             if (modalCaptionToggle) modalCaptionToggle.classList.remove('visible');
             if (modalFullscreenToggle) modalFullscreenToggle.classList.remove('visible');

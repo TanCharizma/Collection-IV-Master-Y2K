@@ -31,6 +31,7 @@
     <div class="app-transition-curtain ${startClass}" id="appCurtain"></div>
     <nav class="${navClass}">
         <a href="${logoHref}" class="logo">${window.CLIENT_CONFIG.name}</a>
+        <span class="nav-system-label" aria-hidden="true">PORTFOLIO.EXE</span>
         <div class="nav-links">
             <div class="dropdown">
                 <a href="${logoHref}" class="dropdown-trigger">

@@ -1782,7 +1782,7 @@ footer {
     :root {
         --margin: 48px;
         --gutter: 16px;
-        --mobile-viewport-overbleed: 18vh;
+        --mobile-viewport-overbleed: 24vh;
     }
     html,
     body {
@@ -1833,26 +1833,16 @@ footer {
     /* Y2K Adjustments for Mobile */
     nav { top: 12px; width: calc(100% - 24px); height: 60px; padding: 0 16px; border-radius: 100px; }
     .hero {
-        min-height: 118svh;
+        min-height: 122svh;
         padding-bottom: calc(var(--mobile-viewport-overbleed) + env(safe-area-inset-bottom));
         overflow: hidden;
-        background: var(--black);
-    }
-    .hero::before {
-        inset: 12px 12px calc(-1 * var(--mobile-viewport-overbleed)) 12px;
-        border-radius: 24px;
-        background-image: radial-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 0);
-        background-size: 24px 24px;
-        background-color: var(--black);
-        opacity: 1;
-        z-index: 0;
+        background: var(--bg);
     }
     .hero-bg {
         top: 12px;
         right: 12px;
         left: 12px;
         bottom: calc(-1 * var(--mobile-viewport-overbleed));
-        z-index: 1;
         border-radius: 24px;
         box-shadow: 4px 4px 0 var(--border-subtle);
     }

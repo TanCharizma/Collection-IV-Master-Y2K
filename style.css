@@ -1848,7 +1848,7 @@ footer {
     .hero-content {
         width: calc(100% - 48px);
         margin-left: 0;
-        margin-bottom: 12vh;
+        margin-bottom: 9vh;
         padding: 14px 18px;
         border-radius: 24px;
     }

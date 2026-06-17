@@ -242,7 +242,7 @@ nav::before {
 }
 
 @keyframes heroFadeIn {
-    from { opacity: 0; transform: scale(1.1) translateZ(0); }
+    from { opacity: 0; transform: scale(1.035) translateZ(0); }
     to { opacity: 1; transform: scale(1) translateZ(0); }
 }
 
@@ -575,16 +575,12 @@ nav.on-hero:not(.scrolled) .dropdown-trigger.active:hover {
     will-change: transform; /* Offloads parallax strictly to the GPU */
 }
 
-.hero-mobile-overbleed-bg {
-    display: none;
-}
-
 .hero:not(.loaded) .hero-bg {
     opacity: 0; /* Hide strictly while waiting for the JS gatekeeper */
 }
 
 .hero.loaded .hero-bg {
-    animation: heroFadeIn 2.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: heroFadeIn 1.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .hero-content p {
@@ -1837,26 +1833,23 @@ footer {
     /* Y2K Adjustments for Mobile */
     nav { top: 12px; width: calc(100% - 24px); height: 60px; padding: 0 16px; border-radius: 100px; }
     .hero {
-        height: calc(100vh + var(--mobile-viewport-overbleed));
-        height: calc(100lvh + var(--mobile-viewport-overbleed));
-        min-height: calc(100vh + var(--mobile-viewport-overbleed));
-        min-height: calc(100svh + var(--mobile-viewport-overbleed));
-        padding-bottom: calc(var(--mobile-viewport-overbleed) + env(safe-area-inset-bottom));
+        height: 115svh;
+        min-height: 115svh;
+        padding-bottom: calc(var(--margin) + env(safe-area-inset-bottom));
         overflow: hidden;
         background: var(--bg);
     }
-    .hero-mobile-overbleed-bg {
-        display: block;
+    .hero::after {
+        content: '';
         position: absolute;
-        top: 12px;
-        right: 12px;
-        left: 12px;
-        height: calc(100% + var(--mobile-viewport-overbleed) + env(safe-area-inset-bottom));
+        left: 0;
+        right: 0;
+        bottom: calc(-1 * var(--mobile-viewport-overbleed));
+        height: calc(var(--mobile-viewport-overbleed) + 24vh);
+        background-image: url('image/hero/hero.webp');
         background-repeat: no-repeat;
-        background-position: center 10%;
+        background-position: center bottom;
         background-size: cover;
-        border-radius: 24px;
-        opacity: 0.78;
         z-index: 0;
         pointer-events: none;
     }
@@ -1866,12 +1859,12 @@ footer {
     .hero-bg {
         top: 12px;
         right: 12px;
+        bottom: calc(-1 * var(--mobile-viewport-overbleed));
         left: 12px;
-        bottom: auto;
-        height: calc(100% + var(--mobile-viewport-overbleed) + env(safe-area-inset-bottom));
-        z-index: 1;
+        height: auto;
         border-radius: 24px;
         box-shadow: 4px 4px 0 var(--border-subtle);
+        z-index: 1;
     }
     .hero-content {
         z-index: 3;

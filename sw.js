@@ -1,4 +1,4 @@
-const CACHE_NAME = 'y2k-portfolio-v13';
+const CACHE_NAME = 'y2k-portfolio-v14';
 const ASSETS_TO_CACHE = [
     '/',
     '/index.html',

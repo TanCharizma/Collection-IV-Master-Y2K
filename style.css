@@ -242,7 +242,7 @@ nav::before {
 }
 
 @keyframes heroFadeIn {
-    from { opacity: 0; transform: scale(1.035) translateZ(0); }
+    from { opacity: 1; transform: scale(1.018) translateZ(0); }
     to { opacity: 1; transform: scale(1) translateZ(0); }
 }
 
@@ -576,7 +576,8 @@ nav.on-hero:not(.scrolled) .dropdown-trigger.active:hover {
 }
 
 .hero:not(.loaded) .hero-bg {
-    opacity: 0; /* Hide strictly while waiting for the JS gatekeeper */
+    opacity: 1;
+    transform: scale(1.018) translateZ(0);
 }
 
 .hero.loaded .hero-bg {
@@ -1839,27 +1840,13 @@ footer {
         overflow: hidden;
         background: var(--bg);
     }
-    .hero::after {
-        content: '';
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: calc(-1 * var(--mobile-viewport-overbleed));
-        height: calc(var(--mobile-viewport-overbleed) + 24vh);
-        background-image: url('image/hero/hero.webp');
-        background-repeat: no-repeat;
-        background-position: center bottom;
-        background-size: cover;
-        z-index: 0;
-        pointer-events: none;
-    }
     .hero::before {
         z-index: 2;
     }
     .hero-bg {
         top: 12px;
         right: 12px;
-        bottom: calc(-1 * var(--mobile-viewport-overbleed));
+        bottom: calc(-1 * (var(--mobile-viewport-overbleed) + env(safe-area-inset-bottom) + 72px));
         left: 12px;
         height: auto;
         border-radius: 24px;

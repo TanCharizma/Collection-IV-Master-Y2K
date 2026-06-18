@@ -1839,7 +1839,19 @@ footer {
         min-height: 115svh;
         padding-bottom: calc(var(--margin) + env(safe-area-inset-bottom));
         overflow: hidden;
-        background: var(--bg);
+        background-color: var(--bg);
+        background-image:
+            linear-gradient(
+                to bottom,
+                var(--bg) 0%,
+                var(--bg) 68%,
+                rgba(255, 255, 255, 0.72) 84%,
+                rgba(255, 255, 255, 0.16) 100%
+            ),
+            url('image/hero/hero.webp');
+        background-repeat: no-repeat;
+        background-position: center bottom;
+        background-size: cover;
     }
     .hero::before {
         z-index: 2;

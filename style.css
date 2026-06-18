@@ -1831,6 +1831,22 @@ footer {
 /* Standard Mobile (480px and below) */
 @media (max-width: 480px) {
     :root { --margin: 24px; }
+    body::before {
+        content: "";
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        height: 190px;
+        background-image:
+            linear-gradient(to top, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.12) 52%, rgba(255, 255, 255, 0)),
+            url('image/hero/hero.webp');
+        background-repeat: no-repeat;
+        background-position: center bottom;
+        background-size: cover;
+        z-index: 0;
+        pointer-events: none;
+    }
     
     /* Y2K Adjustments for Mobile */
     nav { top: 12px; width: calc(100% - 24px); height: 60px; padding: 0 16px; border-radius: 100px; }

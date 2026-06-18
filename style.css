@@ -1831,17 +1831,6 @@ footer {
 /* Standard Mobile (480px and below) */
 @media (max-width: 480px) {
     :root { --margin: 24px; }
-    html {
-        background-color: #050505;
-        background-image: url('image/hero/hero.webp');
-        background-repeat: no-repeat;
-        background-position: center bottom;
-        background-size: cover;
-        background-attachment: fixed;
-    }
-    body {
-        background: var(--bg);
-    }
     
     /* Y2K Adjustments for Mobile */
     nav { top: 12px; width: calc(100% - 24px); height: 60px; padding: 0 16px; border-radius: 100px; }
@@ -1856,9 +1845,9 @@ footer {
         z-index: 2;
     }
     .hero-bg {
-        top: 12px;
+        top: -6svh;
         right: 12px;
-        bottom: calc(-1 * var(--mobile-viewport-overbleed));
+        bottom: -15svh;
         left: 12px;
         height: auto;
         border-radius: 24px;

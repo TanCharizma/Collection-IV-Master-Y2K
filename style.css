@@ -1845,9 +1845,9 @@ footer {
         z-index: 2;
     }
     .hero-bg {
-        top: -6svh;
+        top: 12px;
         right: 12px;
-        bottom: -15svh;
+        bottom: calc(-1 * var(--mobile-viewport-overbleed));
         left: 12px;
         height: auto;
         border-radius: 24px;

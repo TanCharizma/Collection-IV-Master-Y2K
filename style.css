@@ -1846,7 +1846,7 @@ footer {
     .hero-bg {
         top: 12px;
         right: 12px;
-        bottom: calc(-1 * (var(--mobile-viewport-overbleed) + env(safe-area-inset-bottom) + 72px));
+        bottom: calc(-1 * var(--mobile-viewport-overbleed));
         left: 12px;
         height: auto;
         border-radius: 24px;

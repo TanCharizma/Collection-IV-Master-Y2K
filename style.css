@@ -43,6 +43,7 @@
 html {
     width: 100%;
     scrollbar-gutter: stable; /* Prevents layout shift when modals open */
+    background: var(--bg);
 }
 
 /* Modern Scrollbar Styling */
@@ -1830,6 +1831,17 @@ footer {
 /* Standard Mobile (480px and below) */
 @media (max-width: 480px) {
     :root { --margin: 24px; }
+    html {
+        background-color: #050505;
+        background-image: url('image/hero/hero.webp');
+        background-repeat: no-repeat;
+        background-position: center bottom;
+        background-size: cover;
+        background-attachment: fixed;
+    }
+    body {
+        background: var(--bg);
+    }
     
     /* Y2K Adjustments for Mobile */
     nav { top: 12px; width: calc(100% - 24px); height: 60px; padding: 0 16px; border-radius: 100px; }

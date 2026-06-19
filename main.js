@@ -39,14 +39,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         toReveal.forEach((entry, index) => {
             const el = entry.target;
-            if (!Array.from(el.classList).some(cls => cls.startsWith('delay-'))) {
-                el.style.transitionDelay = `${index * 0.1}s`;
+            const useCssStagger = el.matches('.full-grid img.reveal');
+            if (!useCssStagger && !Array.from(el.classList).some(cls => cls.startsWith('delay-'))) {
+                const staggerDelay = Math.min(index * 0.06, 0.42);
+                el.style.transitionDelay = `${staggerDelay}s`;
             }
 
             const images = el.tagName === 'IMG' ? [el] : Array.from(el.querySelectorAll('img'));
-            const pendingImages = images.filter(img => !img.complete);
+            const pendingImages = useCssStagger ? [] : images.filter(img => !img.complete);
 
+            let didReveal = false;
             const triggerActive = () => {
+                if (didReveal) return;
+                didReveal = true;
                 requestAnimationFrame(() => {
                     requestAnimationFrame(() => el.classList.add('active'));
                 });
@@ -58,23 +63,29 @@ document.addEventListener('DOMContentLoaded', () => {
             if (el.style.transitionDelay) {
                 delayMs = parseFloat(el.style.transitionDelay) * 1000;
             } else {
-                if (el.classList.contains('delay-1')) delayMs = 150;
-                else if (el.classList.contains('delay-2')) delayMs = 300;
-                else if (el.classList.contains('delay-3')) delayMs = 450;
-                else if (el.classList.contains('delay-4')) delayMs = 600;
+                const computedDelay = window.getComputedStyle(el).transitionDelay || '0s';
+                delayMs = computedDelay
+                    .split(',')
+                    .map(delay => delay.trim())
+                    .map(delay => delay.endsWith('ms') ? parseFloat(delay) : parseFloat(delay) * 1000)
+                    .reduce((max, delay) => Math.max(max, Number.isFinite(delay) ? delay : 0), 0);
             }
             setTimeout(() => {
                 el.style.transitionDelay = '0s';
                 el.classList.add('reveal-done');
-            }, delayMs + 850); // 800ms animation duration + 50ms safe buffer
+            }, delayMs + 900); // entrance duration + safe buffer
             };
 
             if (pendingImages.length > 0) {
                 let loadedCount = 0;
+                let revealFallback = setTimeout(triggerActive, el.tagName === 'IMG' ? 450 : 750);
                 pendingImages.forEach(img => {
                     const checkLoad = () => {
                         loadedCount++;
-                        if (loadedCount === pendingImages.length) triggerActive();
+                        if (loadedCount === pendingImages.length) {
+                            clearTimeout(revealFallback);
+                            triggerActive();
+                        }
                     };
                     img.addEventListener('load', checkLoad, { once: true });
                     img.addEventListener('error', checkLoad, { once: true });

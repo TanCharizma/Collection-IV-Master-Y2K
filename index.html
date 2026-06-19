@@ -56,7 +56,23 @@
 
     <!-- Y2K Splash Screen -->
     <div id="splash-screen" class="splash-screen">
-        <div class="splash-logo" id="splashClientName"></div>
+        <div class="splash-window" aria-hidden="true">
+            <div class="splash-window__bar">
+                <span class="splash-window__dots">
+                    <i></i><i></i><i></i>
+                </span>
+                <span class="splash-window__file" id="splashProfileFile">CLIENT_PROFILE.EXE</span>
+                <span class="splash-window__status">ONLINE</span>
+            </div>
+            <div class="splash-window__body">
+                <p class="splash-kicker">LOADING_PORTFOLIO</p>
+                <div class="splash-logo" id="splashClientName"></div>
+                <p class="splash-tagline">Digital model profile / 001</p>
+                <div class="splash-loader">
+                    <span></span><span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
         <script>
             (function() {
                 const navEntries = performance.getEntriesByType("navigation");
@@ -66,7 +82,14 @@
                 }
             })();
             if (window.CLIENT_CONFIG) {
-                document.getElementById('splashClientName').textContent = window.CLIENT_CONFIG.name;
+                const clientName = window.CLIENT_CONFIG.name || 'CLIENT NAME';
+                const profileFileName = clientName
+                    .trim()
+                    .replace(/[^a-zA-Z0-9]+/g, '_')
+                    .replace(/^_+|_+$/g, '')
+                    .toUpperCase();
+                document.getElementById('splashClientName').textContent = clientName;
+                document.getElementById('splashProfileFile').textContent = `${profileFileName || 'CLIENT'}_PROFILE.EXE`;
             }
         </script>
     </div>
@@ -123,19 +146,21 @@
     </section>
 
     <!-- SECTION 2.5: Selected Clients -->
-    <section id="selected-clients" style="padding: 0 0 96px 0;">
+    <section id="selected-clients" class="client-strip-section">
         <div class="container">
-            <div style="grid-column: span 12; text-align: center;">
-                <h3 class="reveal" style="font-size: 12px; letter-spacing: 0.3em; margin-bottom: 48px; opacity: 0.5; font-weight: 400;">
-                    <span lang="en">Selected Clients</span>
-                    <span lang="th">ลูกค้าที่ร่วมงาน</span>
-                </h3>
-                <div class="reveal delay-1" style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: clamp(32px, 6vw, 64px); opacity: 0.5;">
-                    <img src="image/brand_icons/vogue.webp" alt="VOGUE" class="brand-logo" style="height: clamp(16px, 3vw, 20px); width: auto; object-fit: contain; pointer-events: none;" loading="lazy" decoding="async">
-                    <img src="image/brand_icons/elle.webp" alt="ELLE" class="brand-logo" style="height: clamp(16px, 3vw, 20px); width: auto; object-fit: contain; pointer-events: none;" loading="lazy" decoding="async">
-                    <img src="image/brand_icons/cartier.webp" alt="CARTIER" class="brand-logo" style="height: clamp(16px, 3vw, 20px); width: auto; object-fit: contain; pointer-events: none;" loading="lazy" decoding="async">
-                    <img src="image/brand_icons/armani.webp" alt="ARMANI" class="brand-logo" style="height: clamp(16px, 3vw, 20px); width: auto; object-fit: contain; pointer-events: none;" loading="lazy" decoding="async">
-                    <img src="image/brand_icons/levi.webp" alt="LEVI'S" class="brand-logo" style="height: clamp(16px, 3vw, 20px); width: auto; object-fit: contain; pointer-events: none;" loading="lazy" decoding="async">
+            <div class="client-strip client-strip--compact reveal" style="grid-column: span 12;">
+                <div class="client-strip__header">
+                    <h3>
+                        <span lang="en">Selected Clients</span>
+                        <span lang="th">ลูกค้าที่ร่วมงาน</span>
+                    </h3>
+                </div>
+                <div class="client-strip__logos reveal delay-1">
+                    <img src="image/brand_icons/vogue.webp" alt="VOGUE" class="brand-logo" loading="lazy" decoding="async">
+                    <img src="image/brand_icons/elle.webp" alt="ELLE" class="brand-logo" loading="lazy" decoding="async">
+                    <img src="image/brand_icons/cartier.webp" alt="CARTIER" class="brand-logo" loading="lazy" decoding="async">
+                    <img src="image/brand_icons/armani.webp" alt="ARMANI" class="brand-logo" loading="lazy" decoding="async">
+                    <img src="image/brand_icons/levi.webp" alt="LEVI'S" class="brand-logo" loading="lazy" decoding="async">
                 </div>
             </div>
         </div>
@@ -220,15 +245,19 @@
                 <span lang="en">Measurements</span>
                 <span lang="th">สัดส่วน</span>
             </p>
-            <div style="grid-column: span 12;">
+            <div class="measurements-panel reveal delay-1" style="grid-column: span 12;">
+                <div class="measurements-panel__chrome">
+                    <span>PROFILE_STATS.EXE</span>
+                    <span>READY</span>
+                </div>
                 <div class="info-strip">
-                    <div><span lang="en">Height</span><span lang="th">ส่วนสูง</span> / <span id="val-height"></span></div>
-                    <div><span lang="en">Bust</span><span lang="th">อก</span> / <span id="val-bust"></span></div>
-                    <div><span lang="en">Waist</span><span lang="th">เอว</span> / <span id="val-waist"></span></div>
-                    <div><span lang="en">Hips</span><span lang="th">สะโพก</span> / <span id="val-hips"></span></div>
-                    <div><span lang="en">Shoes</span><span lang="th">รองเท้า</span> / <span id="val-shoes"></span></div>
-                    <div><span lang="en">Hair</span><span lang="th">สีผม</span> / <span lang="en" id="val-hairEn"></span><span lang="th" id="val-hairTh"></span></div>
-                    <div><span lang="en">Eyes</span><span lang="th">นัยน์ตา</span> / <span lang="en" id="val-eyesEn"></span><span lang="th" id="val-eyesTh"></span></div>   
+                    <div><span class="stat-label"><span lang="en">Height</span><span lang="th">ส่วนสูง</span></span><strong id="val-height"></strong></div>
+                    <div><span class="stat-label"><span lang="en">Bust</span><span lang="th">อก</span></span><strong id="val-bust"></strong></div>
+                    <div><span class="stat-label"><span lang="en">Waist</span><span lang="th">เอว</span></span><strong id="val-waist"></strong></div>
+                    <div><span class="stat-label"><span lang="en">Hips</span><span lang="th">สะโพก</span></span><strong id="val-hips"></strong></div>
+                    <div><span class="stat-label"><span lang="en">Shoes</span><span lang="th">รองเท้า</span></span><strong id="val-shoes"></strong></div>
+                    <div><span class="stat-label"><span lang="en">Hair</span><span lang="th">สีผม</span></span><strong><span lang="en" id="val-hairEn"></span><span lang="th" id="val-hairTh"></span></strong></div>
+                    <div><span class="stat-label"><span lang="en">Eyes</span><span lang="th">นัยน์ตา</span></span><strong><span lang="en" id="val-eyesEn"></span><span lang="th" id="val-eyesTh"></span></strong></div>
                 </div>
                 <!-- Subtle Comp Card Button -->
                 <div class="reveal delay-1" id="compCardContainer" style="text-align: center; margin-top: 24px;">

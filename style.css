@@ -617,7 +617,7 @@ nav.on-hero:not(.scrolled) .dropdown-trigger.active:hover {
 
 .hero-marquee-track {
     display: flex;
-    animation: marqueeScroll 12s linear infinite;
+    animation: marqueeScroll 20s linear infinite;
 }
 
 .hero-marquee:hover .hero-marquee-track {
@@ -2082,7 +2082,7 @@ footer {
         border-radius: 24px;
     }
     .hero-marquee { bottom: 12px; width: calc(100% - 24px); padding: 7px 0; }
-    .hero-marquee-track { animation-duration: 20s; }
+    .hero-marquee-track { animation-duration: 30s; }
     .hero-marquee-track span { font-size: 9px; padding: 0 18px; letter-spacing: 0.16em; }
     .scroll-indicator { bottom: 64px; transform: translateX(-50%) scale(0.72); } /* Shrinks bouncy arrow proportionately */
 

@@ -24,7 +24,7 @@
         document.title = currentTitle + ' | ' + window.CLIENT_CONFIG.name;
     }
 
-    // Start the curtain hidden on the Homepage (so the luxury splash screen plays), but start it covering the screen on subpages.
+    // Start the curtain hidden on the Homepage so the Y2K splash screen plays, but start it covering the screen on subpages.
     const startClass = isHomePage ? '' : 'start-covered';
 
     const navHTML = `

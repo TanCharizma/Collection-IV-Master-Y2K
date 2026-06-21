@@ -1842,9 +1842,10 @@ footer {
         left: -24px;
         transform: translateX(100%);
         width: calc(100% + 48px);
-        height: 100vh;
-        background: var(--nav-bg);
-        backdrop-filter: blur(15px); /* Reduced for buttery smooth mobile entrance */
+        height: 100dvh;
+        background: rgba(255, 255, 255, 0.94);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
         flex-direction: column;
         justify-content: center;
         align-items: center;
@@ -1857,6 +1858,10 @@ footer {
         overflow-y: auto;
         overscroll-behavior: contain; /* Stops background page drag */
         touch-action: pan-y; /* Locks gestures strictly to vertical to prevent horizontal sliding */
+    }
+
+    [data-theme="dark"] .nav-links {
+        background: rgba(5, 5, 5, 0.94);
     }
 
     nav.nav-open .nav-links { transform: translateX(0); }

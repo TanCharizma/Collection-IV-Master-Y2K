@@ -224,6 +224,20 @@
         delay > 0 ? setTimeout(run, delay) : run();
     };
     let activeAnchorScroll = 0;
+    let pendingAnchorTimer = 0;
+    let pendingAnchorRafOne = 0;
+    let pendingAnchorRafTwo = 0;
+    let activeAnchorAbort = null;
+    const clearPendingAnchorGlide = () => {
+        if (pendingAnchorTimer) clearTimeout(pendingAnchorTimer);
+        if (pendingAnchorRafOne) cancelAnimationFrame(pendingAnchorRafOne);
+        if (pendingAnchorRafTwo) cancelAnimationFrame(pendingAnchorRafTwo);
+        if (activeAnchorAbort) activeAnchorAbort.abort();
+        pendingAnchorTimer = 0;
+        pendingAnchorRafOne = 0;
+        pendingAnchorRafTwo = 0;
+        activeAnchorAbort = null;
+    };
     function scrollToAnchor(targetId, behavior = 'smooth') {
         if (!targetId || targetId === '#') return;
         const target = document.querySelector(targetId);
@@ -237,6 +251,10 @@
         forceInstantScrollBehavior();
         const restoreScrollBehavior = () => {
             if (scrollRun !== activeAnchorScroll) return;
+            if (activeAnchorAbort) {
+                activeAnchorAbort.abort();
+                activeAnchorAbort = null;
+            }
             restoreInstantScrollBehavior();
         };
         let isUserScrolling = false;
@@ -244,8 +262,9 @@
             isUserScrolling = true;
             restoreScrollBehavior();
         };
+        activeAnchorAbort = new AbortController();
         ['wheel', 'touchstart', 'mousedown', 'keydown'].forEach(evt => {
-            window.addEventListener(evt, stopCorrection, { once: true, passive: true });
+            window.addEventListener(evt, stopCorrection, { once: true, passive: true, signal: activeAnchorAbort.signal });
         });
         const startTime = performance.now();
         const minTrackTime = window.innerWidth <= 768 ? 1100 : 650;
@@ -294,7 +313,23 @@
             scrollLoop(time);
         });
     }
-    const glideToAnchor = (targetId, delay = 0) => runAfterViewportSettles(() => scrollToAnchor(targetId), delay);
+    const glideToAnchor = (targetId, delay = 0) => {
+        clearPendingAnchorGlide();
+        activeAnchorScroll++;
+        restoreInstantScrollBehavior();
+        const run = () => {
+            pendingAnchorTimer = 0;
+            pendingAnchorRafOne = requestAnimationFrame(() => {
+                pendingAnchorRafTwo = requestAnimationFrame(() => {
+                    pendingAnchorRafOne = 0;
+                    pendingAnchorRafTwo = 0;
+                    scrollToAnchor(targetId);
+                });
+            });
+        };
+        if (delay > 0) pendingAnchorTimer = setTimeout(run, delay);
+        else run();
+    };
     window.FolioLabScrollToAnchor = glideToAnchor;
     window.Y2KScrollToAnchor = glideToAnchor;
     let menuTouchStartX = 0;

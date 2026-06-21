@@ -2003,6 +2003,10 @@ footer {
     body {
         background: var(--bg);
     }
+
+    body::after {
+        display: none;
+    }
     
     /* Y2K Adjustments for Tablet */
     nav { top: 16px; width: calc(100% - 32px); padding: 0 24px; }

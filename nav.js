@@ -227,22 +227,30 @@
     let pendingAnchorTimer = 0;
     let pendingAnchorRafOne = 0;
     let pendingAnchorRafTwo = 0;
-    let activeAnchorAbort = null;
+    let activeAnchorCleanup = null;
+    let activeAnchorTarget = '';
+    let activeAnchorStartedAt = 0;
+    const cleanupActiveAnchorListeners = () => {
+        if (!activeAnchorCleanup) return;
+        activeAnchorCleanup();
+        activeAnchorCleanup = null;
+    };
     const clearPendingAnchorGlide = () => {
         if (pendingAnchorTimer) clearTimeout(pendingAnchorTimer);
         if (pendingAnchorRafOne) cancelAnimationFrame(pendingAnchorRafOne);
         if (pendingAnchorRafTwo) cancelAnimationFrame(pendingAnchorRafTwo);
-        if (activeAnchorAbort) activeAnchorAbort.abort();
+        cleanupActiveAnchorListeners();
         pendingAnchorTimer = 0;
         pendingAnchorRafOne = 0;
         pendingAnchorRafTwo = 0;
-        activeAnchorAbort = null;
     };
     function scrollToAnchor(targetId, behavior = 'smooth') {
         if (!targetId || targetId === '#') return;
         const target = document.querySelector(targetId);
         if (!target) return;
         const scrollRun = ++activeAnchorScroll;
+        activeAnchorTarget = targetId;
+        activeAnchorStartedAt = performance.now();
         history.replaceState(null, null, targetId);
         if (behavior === 'auto' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             instantScrollTo(getAnchorTargetY(target));
@@ -251,10 +259,7 @@
         forceInstantScrollBehavior();
         const restoreScrollBehavior = () => {
             if (scrollRun !== activeAnchorScroll) return;
-            if (activeAnchorAbort) {
-                activeAnchorAbort.abort();
-                activeAnchorAbort = null;
-            }
+            cleanupActiveAnchorListeners();
             restoreInstantScrollBehavior();
         };
         let isUserScrolling = false;
@@ -262,10 +267,13 @@
             isUserScrolling = true;
             restoreScrollBehavior();
         };
-        activeAnchorAbort = new AbortController();
-        ['wheel', 'touchstart', 'mousedown', 'keydown'].forEach(evt => {
-            window.addEventListener(evt, stopCorrection, { once: true, passive: true, signal: activeAnchorAbort.signal });
+        const interruptEvents = ['wheel', 'touchstart', 'mousedown', 'keydown'];
+        interruptEvents.forEach(evt => {
+            window.addEventListener(evt, stopCorrection, { once: true, passive: true });
         });
+        activeAnchorCleanup = () => {
+            interruptEvents.forEach(evt => window.removeEventListener(evt, stopCorrection));
+        };
         const startTime = performance.now();
         const minTrackTime = window.innerWidth <= 768 ? 1100 : 650;
         let stableFrames = 0;
@@ -314,8 +322,12 @@
         });
     }
     const glideToAnchor = (targetId, delay = 0) => {
+        const now = performance.now();
+        if (targetId === activeAnchorTarget && now - activeAnchorStartedAt < 2200) return;
         clearPendingAnchorGlide();
         activeAnchorScroll++;
+        activeAnchorTarget = targetId;
+        activeAnchorStartedAt = now;
         restoreInstantScrollBehavior();
         const run = () => {
             pendingAnchorTimer = 0;

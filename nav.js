@@ -24,8 +24,13 @@
         document.title = currentTitle + ' | ' + window.CLIENT_CONFIG.name;
     }
 
-    // Start the curtain hidden on the Homepage so the Y2K splash screen plays, but start it covering the screen on subpages.
-    const startClass = isHomePage ? '' : 'start-covered';
+    const isInternalNav = sessionStorage.getItem('internalNav_Y2K') === 'true';
+    sessionStorage.removeItem('internalNav_Y2K');
+    const pendingAnchor = sessionStorage.getItem('pendingAnchor_Y2K');
+    sessionStorage.removeItem('pendingAnchor_Y2K');
+
+    // Start the curtain hidden on first Homepage load so the Y2K splash screen plays, but cover subpages and internal returns.
+    const startClass = (!isHomePage || isInternalNav) ? 'start-covered' : '';
 
     const navHTML = `
     <div class="app-transition-curtain ${startClass}" id="appCurtain"></div>
@@ -93,9 +98,17 @@
     // --- NATIVE APP TRANSITION LOGIC ---
     document.addEventListener('DOMContentLoaded', () => {
         const curtain = document.getElementById('appCurtain');
+
+        if (isHomePage && isInternalNav) {
+            const splash = document.getElementById('splash-screen');
+            if (splash) {
+                splash.removeAttribute('id');
+                splash.style.display = 'none';
+            }
+        }
         
         // Subpage Entrance: Slide curtain out the top to reveal the new page
-        if (!isHomePage && curtain) {
+        if ((!isHomePage || isInternalNav) && curtain) {
             requestAnimationFrame(() => {
                 requestAnimationFrame(() => {
                     curtain.style.transition = 'transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
@@ -124,6 +137,14 @@
 
             e.preventDefault();
 
+            sessionStorage.setItem('internalNav_Y2K', 'true');
+            const hashIndex = href.indexOf('#');
+            let navigationHref = href;
+            if (hashIndex !== -1 && targetPath === 'index.html') {
+                sessionStorage.setItem('pendingAnchor_Y2K', href.substring(hashIndex));
+                navigationHref = href.substring(0, hashIndex) || 'index.html';
+            }
+
             // Close mobile menu if it's open so it doesn't glitch during transition
             if (navElement && navElement.classList.contains('nav-open')) {
                 navElement.classList.remove('nav-open');
@@ -142,7 +163,7 @@
             });
 
             // Wait for curtain to fully cover the screen, then navigate
-            setTimeout(() => window.location.href = href, 400);
+            setTimeout(() => window.location.href = navigationHref, 400);
         });
 
         // Failsafe for iOS Swipe-Back gesture (BFCache reset)
@@ -442,10 +463,11 @@
     // Dynamic Layout-Aware Hash Navigation Fix (Homepage Only)
     if (isHomePage) {
         window.addEventListener('load', () => {
-            if (window.location.hash) {
-                scrollToAnchor(window.location.hash, 'auto');
+            const targetHash = pendingAnchor || window.location.hash;
+            if (targetHash) {
+                glideToAnchor(targetHash, isInternalNav || pendingAnchor ? 420 : 160);
             }
-        });
+        }, { once: true });
     }
 
     // Auto-inject Config Data into HTML placeholders

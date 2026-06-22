@@ -401,10 +401,11 @@
         const targetId = href.substring(href.indexOf('#'));
         if (!document.querySelector(targetId)) return;
         e.preventDefault();
+        e.stopImmediatePropagation();
         const wasMenuOpen = navElement.classList.contains('nav-open');
         if (wasMenuOpen) closeMobileMenu();
         glideToAnchor(targetId, wasMenuOpen ? 320 : 0);
-    });
+    }, true);
 
     // Theme Switching Logic
     const themeToggle = navElement.querySelector('#themeToggle');

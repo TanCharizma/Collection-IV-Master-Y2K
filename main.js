@@ -200,8 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             const parallax = scrollOffset * 0.15;
                             heroBg.style.transform = `scale(${scale}) translate3d(0, ${parallax}px, 0)`;
                         } else {
-                            const scale = 1 + (scrollOffset / vh) * 0.15;
-                            heroBg.style.transform = `scale(${scale}) translateZ(0)`;
+                            heroBg.style.transform = 'none';
                         }
                         const fadeOpacity = Math.max(0, 1 - (scrollOffset / (vh * 0.6)));
                         heroContent.style.opacity = fadeOpacity;

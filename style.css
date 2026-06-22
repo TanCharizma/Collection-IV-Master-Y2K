@@ -2345,6 +2345,20 @@ footer {
 }
 
 /* --- SPLASH SCREEN --- */
+html.is-loading,
+html.is-loading body {
+    overflow: hidden;
+    background: var(--bg);
+}
+
+html.is-loading body > :not(#splash-screen) {
+    visibility: hidden;
+}
+
+html.is-loading #splash-screen {
+    visibility: visible;
+}
+
 .splash-screen {
     position: fixed;
     inset: 0;

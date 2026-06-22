@@ -172,7 +172,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (splashScreen) {
             if (splashScreen.style.display === 'none') {
                 // Splash screen was skipped by the inline script
-                heroImageLoad.then(triggerHeroEntrance);
+                heroImageLoad.then(() => {
+                    document.documentElement.classList.remove('is-loading');
+                    triggerHeroEntrance();
+                });
             } else {
                 sessionStorage.setItem('hasSeenSplash', 'true');
                 document.body.style.overflow = 'hidden'; // Lock screen during splash
@@ -180,12 +183,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     splashScreen.classList.add('hidden');
                     setTimeout(() => {
                         document.body.style.overflow = ''; // Unlock scrolling
+                        document.documentElement.classList.remove('is-loading');
                         triggerHeroEntrance();
                     }, 400); // Trigger hero text reveal exactly halfway through the splash screen fade-out
                 });
             }
         } else {
-            heroImageLoad.then(triggerHeroEntrance);
+            heroImageLoad.then(() => {
+                document.documentElement.classList.remove('is-loading');
+                triggerHeroEntrance();
+            });
         }
 
         let ticking = false;

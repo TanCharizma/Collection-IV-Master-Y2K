@@ -105,6 +105,7 @@
                 splash.removeAttribute('id');
                 splash.style.display = 'none';
             }
+            document.documentElement.classList.remove('is-loading');
         }
         
         // Subpage Entrance: Slide curtain out the top to reveal the new page

@@ -39,6 +39,15 @@
     <link rel="preconnect" href="https://i.vimeocdn.com">
     <link rel="preload" as="image" href="image/hero/hero.webp" fetchpriority="high">
     <script src="config.js"></script>
+    <script>
+        (function() {
+            try {
+                if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+                window.scrollTo(0, 0);
+            } catch (error) {}
+            document.documentElement.classList.add('is-loading');
+        })();
+    </script>
 
     <!-- JSON-LD Structured Data for Google -->
     <script type="application/ld+json">
@@ -77,8 +86,10 @@
             (function() {
                 const navEntries = performance.getEntriesByType("navigation");
                 const isReload = navEntries.length > 0 ? navEntries[0].type === 'reload' : (window.performance && performance.navigation && performance.navigation.type === 1);
-                if (sessionStorage.getItem('hasSeenSplash') && !isReload) {
+                const isMobileViewport = window.matchMedia('(max-width: 768px)').matches;
+                if (sessionStorage.getItem('hasSeenSplash') && !isReload && !isMobileViewport) {
                     document.getElementById('splash-screen').style.display = 'none';
+                    document.documentElement.classList.remove('is-loading');
                 }
             })();
             if (window.CLIENT_CONFIG) {

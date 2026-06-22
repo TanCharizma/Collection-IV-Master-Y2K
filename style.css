@@ -2144,10 +2144,15 @@ footer {
         transform: translateY(16px) scale(0.985);
     }
 
-    .full-grid img.reveal.active {
+    .full-grid img.reveal.active:not(.reveal-done) {
         opacity: 1;
         transform: translateY(0) scale(1);
         transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+    }
+
+    .full-grid img.reveal.reveal-done {
+        opacity: 1;
+        transform: none;
     }
     
     /* Preserve the uneven Y2K portfolio rhythm while keeping the mobile order stable */

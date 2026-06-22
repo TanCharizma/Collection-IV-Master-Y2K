@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         toReveal.forEach((entry, index) => {
             const el = entry.target;
-            const useCssStagger = el.matches('.full-grid img.reveal');
+            const useCssStagger = el.matches('.full-grid img.reveal') && window.innerWidth > 768;
             if (!useCssStagger && !Array.from(el.classList).some(cls => cls.startsWith('delay-'))) {
                 const staggerDelay = Math.min(index * 0.06, 0.42);
                 el.style.transitionDelay = `${staggerDelay}s`;

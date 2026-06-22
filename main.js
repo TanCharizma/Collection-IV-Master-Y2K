@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 1. GLOBAL REVEAL ANIMATIONS ---
     const revealOptions = {
         threshold: 0,
-        rootMargin: "0px 0px -200px 0px"
+        rootMargin: "0px 0px -150px 0px"
     };
 
     const revealObserver = new IntersectionObserver((entries) => {
@@ -28,18 +28,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (toReveal.length > 1) {
             toReveal.sort((a, b) => {
-                const rectA = a.boundingClientRect;
-                const rectB = b.boundingClientRect;
-                if (Math.abs(rectA.top - rectB.top) > 100) {
-                    return rectA.top - rectB.top;
+                const topA = a.boundingClientRect.top + window.scrollY;
+                const topB = b.boundingClientRect.top + window.scrollY;
+                if (Math.abs(topA - topB) > 10) { // Use a small pixel threshold for row detection
+                    return topA - topB;
                 }
-                return rectA.left - rectB.left;
+                return a.boundingClientRect.left - b.boundingClientRect.left; // Sort by left position for items on the same row
             });
         }
 
         toReveal.forEach((entry, index) => {
             const el = entry.target;
-            const useCssStagger = el.matches('.full-grid img.reveal') && window.innerWidth > 768;
+            const useCssStagger = false; // Force JS stagger for methodical portfolio reveal
             if (!useCssStagger && !Array.from(el.classList).some(cls => cls.startsWith('delay-'))) {
                 const staggerDelay = Math.min(index * 0.06, 0.42);
                 el.style.transitionDelay = `${staggerDelay}s`;

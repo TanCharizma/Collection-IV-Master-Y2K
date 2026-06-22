@@ -985,18 +985,11 @@ section {
 
 .full-grid img.reveal:not(.reveal-done) {
     transition:
-        transform 0.82s cubic-bezier(0.16, 1, 0.3, 1),
-        opacity 0.82s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.72s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 0.72s cubic-bezier(0.16, 1, 0.3, 1),
         box-shadow 0.05s ease,
         border-color 0.05s ease;
 }
-
-.full-grid .masonry-col img.reveal:nth-child(1):not(.reveal-done) { transition-delay: 0s; }
-.full-grid .masonry-col img.reveal:nth-child(2):not(.reveal-done) { transition-delay: 0.08s; }
-.full-grid .masonry-col img.reveal:nth-child(3):not(.reveal-done) { transition-delay: 0.16s; }
-.full-grid .masonry-col img.reveal:nth-child(4):not(.reveal-done) { transition-delay: 0.24s; }
-.full-grid .masonry-col img.reveal:nth-child(5):not(.reveal-done) { transition-delay: 0.32s; }
-.full-grid .masonry-col img.reveal:nth-child(6):not(.reveal-done) { transition-delay: 0.4s; }
 
 .video-grid {
     display: grid;
@@ -1661,7 +1654,7 @@ section {
 
 @media (max-width: 768px) {
     .modal {
-        --modal-mobile-toolbar-clearance: clamp(112px, 13vh, 164px);
+        --modal-mobile-toolbar-clearance: clamp(88px, 10vh, 124px);
         --modal-mobile-gap: 8px;
         --modal-mobile-control-height: 36px;
         --modal-caption-height: 0px;
@@ -2095,6 +2088,7 @@ footer {
     .hero-marquee-track { animation-duration: 30s; }
     .hero-marquee-track span { font-size: 9px; padding: 0 18px; letter-spacing: 0.16em; }
     .scroll-indicator { bottom: 64px; transform: translateX(-50%) scale(0.72); } /* Shrinks bouncy arrow proportionately */
+    .about-scroll-indicator { display: none; }
 
     h1 { font-size: 40px; line-height: 1; letter-spacing: 0.02em; text-shadow: 3px 3px 0 var(--text); }
     .hero-content h1 {
@@ -2137,17 +2131,6 @@ footer {
     .video-item,
     .digitals-grid img {
         will-change: auto;
-    }
-
-    .full-grid img.reveal:not(.active):not(.reveal-done) {
-        opacity: 0;
-        transform: translateY(16px) scale(0.985);
-    }
-
-    .full-grid img.reveal.active:not(.reveal-done) {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-        transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
     }
 
     .full-grid img.reveal.reveal-done {

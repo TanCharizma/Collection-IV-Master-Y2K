@@ -2137,12 +2137,15 @@ footer {
         will-change: auto;
     }
 
-    .full-grid img.reveal,
-    .full-grid img.reveal:not(.reveal-done),
+    .full-grid img.reveal:not(.active):not(.reveal-done) {
+        opacity: 0;
+        transform: translateY(16px) scale(0.985);
+    }
+
     .full-grid img.reveal.active {
         opacity: 1;
-        transform: none;
-        transition: none;
+        transform: translateY(0) scale(1);
+        transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
     }
     
     /* Preserve the uneven Y2K portfolio rhythm while keeping the mobile order stable */
@@ -2211,6 +2214,31 @@ footer {
 
     .about-clients-section {
         padding: 58px 0;
+    }
+
+    .about-page > section:first-of-type {
+        min-height: auto !important;
+        padding-bottom: 64px !important;
+    }
+
+    .about-page .split-layout {
+        gap: 34px;
+    }
+
+    .about-page .split-layout .bio p {
+        margin-bottom: 20px;
+    }
+
+    .about-page .manifesto-card {
+        margin-bottom: 0;
+    }
+
+    .about-page .manifesto-card + div {
+        margin-top: 52px !important;
+    }
+
+    .about-page > section.container:last-of-type {
+        padding-bottom: 96px !important;
     }
 
     /* Measurements */

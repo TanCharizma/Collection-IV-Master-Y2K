@@ -280,21 +280,43 @@
         document.documentElement.classList.add('anchor-gliding');
         history.replaceState(null, null, targetId);
 
-        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const targetY = getAnchorTargetY(target);
-        window.scrollTo({
-            top: targetY,
-            behavior: behavior === 'auto' || reducedMotion ? 'auto' : 'smooth'
-        });
-
-        window.setTimeout(() => {
+        const finish = () => {
             if (scrollRun !== activeAnchorScroll) return;
-            const finalY = getAnchorTargetY(target);
-            if (Math.abs(window.scrollY - finalY) > 4) {
-                instantScrollTo(finalY);
-            }
+            instantScrollTo(getAnchorTargetY(target));
             document.documentElement.classList.remove('anchor-gliding');
-        }, behavior === 'auto' || reducedMotion ? 80 : 850);
+        };
+
+        if (behavior === 'auto' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            finish();
+            return;
+        }
+
+        const curtain = document.getElementById('appCurtain');
+        if (!curtain) {
+            finish();
+            return;
+        }
+
+        curtain.style.transition = 'none';
+        curtain.style.transform = 'translateY(0)';
+        curtain.style.opacity = '1';
+        curtain.style.pointerEvents = 'auto';
+
+        requestAnimationFrame(() => {
+            window.setTimeout(() => {
+                finish();
+                requestAnimationFrame(() => {
+                    curtain.style.transition = 'opacity 0.28s ease';
+                    curtain.style.opacity = '0';
+                    window.setTimeout(() => {
+                        curtain.style.transition = 'none';
+                        curtain.style.transform = 'translateY(100%)';
+                        curtain.style.opacity = '1';
+                        curtain.style.pointerEvents = 'none';
+                    }, 300);
+                });
+            }, 90);
+        });
     };
     function scrollToAnchor(targetId, behavior = 'smooth') {
         if (!targetId || targetId === '#') return;

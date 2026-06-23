@@ -195,7 +195,8 @@
     const getHeaderOffset = () => Math.ceil((navElement && navElement.getBoundingClientRect().height) || 64);
     const getAnchorTargetY = (targetElement) => {
         const targetTop = targetElement.getBoundingClientRect().top + window.scrollY;
-        return Math.max(0, targetTop - getHeaderOffset() - 10);
+        const landingClearance = window.innerWidth <= 768 ? 22 : 10;
+        return Math.max(0, targetTop - getHeaderOffset() - landingClearance);
     };
     let savedInlineScrollBehavior = null;
     const forceInstantScrollBehavior = () => {
@@ -283,7 +284,13 @@
         const finish = () => {
             if (scrollRun !== activeAnchorScroll) return;
             instantScrollTo(getAnchorTargetY(target));
-            document.documentElement.classList.remove('anchor-gliding');
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    if (scrollRun !== activeAnchorScroll) return;
+                    instantScrollTo(getAnchorTargetY(target));
+                    document.documentElement.classList.remove('anchor-gliding');
+                });
+            });
         };
 
         if (behavior === 'auto' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {

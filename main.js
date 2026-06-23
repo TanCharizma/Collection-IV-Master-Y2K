@@ -26,9 +26,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const revealObserver = new IntersectionObserver((entries) => {
         let toReveal = entries.filter(e => e.isIntersecting && !e.target.classList.contains('active'));
 
-        // Only run expensive sorting on desktop. Mobile gets a simpler, more performant reveal.
+        // Sort visible rows for editorial reveals. Portfolio gets this on mobile too so masonry entrances stay ordered.
         const isDesktop = window.innerWidth > 768;
-        if (isDesktop && toReveal.length > 1) {
+        const hasPortfolioImages = toReveal.some(entry => entry.target.matches('.full-grid img.reveal'));
+        if ((isDesktop || hasPortfolioImages) && toReveal.length > 1) {
             toReveal.sort((a, b) => {
                 const topA = a.boundingClientRect.top + window.scrollY;
                 const topB = b.boundingClientRect.top + window.scrollY;
@@ -41,14 +42,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         toReveal.forEach((entry, index) => {
             const el = entry.target;
-            const useCssStagger = !isDesktop; // Use JS stagger on desktop, disable for mobile performance
-            if (!useCssStagger && !Array.from(el.classList).some(cls => cls.startsWith('delay-'))) {
-                const staggerDelay = Math.min(index * 0.06, 0.42);
+            const isPortfolioImage = el.matches('.full-grid img.reveal');
+            const useJsStagger = isDesktop || isPortfolioImage;
+            if (useJsStagger && !Array.from(el.classList).some(cls => cls.startsWith('delay-'))) {
+                const staggerStep = isPortfolioImage ? 0.045 : 0.06;
+                const staggerMax = isPortfolioImage ? 0.27 : 0.42;
+                const staggerDelay = Math.min(index * staggerStep, staggerMax);
                 el.style.transitionDelay = `${staggerDelay}s`;
             }
 
             const images = el.tagName === 'IMG' ? [el] : Array.from(el.querySelectorAll('img'));
-            const pendingImages = useCssStagger ? [] : images.filter(img => !img.complete);
+            const pendingImages = useJsStagger && !isPortfolioImage ? images.filter(img => !img.complete) : [];
 
             let didReveal = false;
             const triggerActive = () => {
@@ -632,13 +636,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const compCardDownload = document.getElementById('compCardDownload');
 
         if (compCardContainer && compCardBtn && compCardModal && compCardImg && compCardDownload) {
+            const getCompCardTransform = (scale = 1) => {
+                return window.innerWidth <= 768 ? `scale(${scale})` : `translate(-50%, -50%) scale(${scale})`;
+            };
             const closeCompCardModal = () => {
                 compCardModal.classList.remove('show-modal');
                 unlockScroll();
                 setTimeout(() => {
                     if (!compCardModal.classList.contains('show-modal')) {
                         compCardImg.style.transition = 'none';
-                        compCardImg.style.transform = 'translate(-50%, -50%)';
+                        compCardImg.style.transform = getCompCardTransform(1);
                         compCardImg.style.opacity = '1';
                     }
                 }, 250);
@@ -660,7 +667,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     // Prep image state BEFORE making modal visible
                     compCardImg.style.transition = 'none';
-                    compCardImg.style.transform = 'translate(-50%, -50%) scale(0.95)';
+                    compCardImg.style.transform = getCompCardTransform(0.95);
                     compCardImg.style.opacity = '0';
                     
                     compCardModal.classList.add('show-modal');
@@ -670,7 +677,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         requestAnimationFrame(() => {
                             requestAnimationFrame(() => {
                                 compCardImg.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease';
-                                compCardImg.style.transform = 'translate(-50%, -50%) scale(1)';
+                                compCardImg.style.transform = getCompCardTransform(1);
                                 compCardImg.style.opacity = '1';
                             });
                         });

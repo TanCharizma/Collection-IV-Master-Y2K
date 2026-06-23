@@ -1661,7 +1661,7 @@ section {
 
 @media (max-width: 768px) {
     .modal {
-        --modal-mobile-toolbar-clearance: clamp(88px, 10vh, 124px);
+        --modal-mobile-toolbar-clearance: clamp(68px, 8vh, 104px);
         --modal-mobile-gap: 8px;
         --modal-mobile-control-height: 36px;
         --modal-caption-height: 0px;
@@ -1680,12 +1680,29 @@ section {
         max-height: 100svh;
     }
 
-    .comp-card-modal-note {
-        bottom: calc(var(--modal-mobile-toolbar-clearance) + max(24px, env(safe-area-inset-bottom))) !important;
+    #compCardModal {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        padding: 28px 18px calc(var(--modal-mobile-toolbar-clearance) + max(22px, env(safe-area-inset-bottom)));
     }
 
     #compCardImg {
-        max-height: calc(100svh - 160px) !important;
+        position: static;
+        max-width: 92vw !important;
+        max-height: calc(100svh - var(--modal-mobile-toolbar-clearance) - 132px) !important;
+        margin: 0;
+        object-fit: contain;
+    }
+
+    .comp-card-modal-note {
+        position: static;
+        transform: none;
+        width: auto;
+        text-align: center;
+        margin: 0;
     }
 
     .modal-caption {

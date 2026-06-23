@@ -20,13 +20,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 1. GLOBAL REVEAL ANIMATIONS ---
     const revealOptions = {
         threshold: 0,
-        rootMargin: "0px 0px -150px 0px"
+        rootMargin: "0px 0px -80px 0px" // Tighter margin to reduce memory on mobile
     };
 
     const revealObserver = new IntersectionObserver((entries) => {
         let toReveal = entries.filter(e => e.isIntersecting && !e.target.classList.contains('active'));
 
-        if (toReveal.length > 1) {
+        // Only run expensive sorting on desktop. Mobile gets a simpler, more performant reveal.
+        const isDesktop = window.innerWidth > 768;
+        if (isDesktop && toReveal.length > 1) {
             toReveal.sort((a, b) => {
                 const topA = a.boundingClientRect.top + window.scrollY;
                 const topB = b.boundingClientRect.top + window.scrollY;
@@ -39,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         toReveal.forEach((entry, index) => {
             const el = entry.target;
-            const useCssStagger = false; // Force JS stagger for methodical portfolio reveal
+            const useCssStagger = !isDesktop; // Use JS stagger on desktop, disable for mobile performance
             if (!useCssStagger && !Array.from(el.classList).some(cls => cls.startsWith('delay-'))) {
                 const staggerDelay = Math.min(index * 0.06, 0.42);
                 el.style.transitionDelay = `${staggerDelay}s`;

@@ -200,21 +200,20 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!ticking) {
                 window.requestAnimationFrame(() => {
                     const scrollOffset = window.scrollY;
-                    if (scrollOffset <= vh) {
-                        if (scrollOffset > 0 && heroBg.style.animation !== 'none') { heroBg.style.animation = 'none'; }
-                        if (window.innerWidth > 768) {
+                    const isMobile = window.innerWidth <= 768;
+
+                    if (scrollOffset <= vh) { // Only run calculations when hero is in view
+                        if (!isMobile) {
+                            // Desktop-only parallax effect
+                            if (scrollOffset > 0 && heroBg.style.animation !== 'none') { heroBg.style.animation = 'none'; }
                             const scale = 1 + (scrollOffset / vh) * 0.4; 
                             const parallax = scrollOffset * 0.15;
                             heroBg.style.transform = `scale(${scale}) translate3d(0, ${parallax}px, 0)`;
-                        } else {
-                            heroBg.style.transform = 'none';
                         }
+                        // Universal fade-out effect for hero content
                         const fadeOpacity = Math.max(0, 1 - (scrollOffset / (vh * 0.6)));
                         heroContent.style.opacity = fadeOpacity;
-                        if (heroMarquee) {
-                            heroMarquee.style.transition = 'none'; // Kills the 0.8s CSS .reveal delay so it locks 1:1 with the scrollbar
-                            heroMarquee.style.opacity = fadeOpacity;
-                        }
+                        if (heroMarquee) heroMarquee.style.opacity = fadeOpacity;
                         if (scrollIndicator) scrollIndicator.style.opacity = fadeOpacity;
                     }
                     ticking = false;

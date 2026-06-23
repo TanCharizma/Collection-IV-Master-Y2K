@@ -273,10 +273,37 @@
         pendingAnchorRafOne = 0;
         pendingAnchorRafTwo = 0;
     };
+    const mobileScrollToAnchor = (target, targetId, behavior = 'smooth') => {
+        const scrollRun = ++activeAnchorScroll;
+        activeAnchorTarget = targetId;
+        activeAnchorStartedAt = performance.now();
+        document.documentElement.classList.add('anchor-gliding');
+        history.replaceState(null, null, targetId);
+
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const targetY = getAnchorTargetY(target);
+        window.scrollTo({
+            top: targetY,
+            behavior: behavior === 'auto' || reducedMotion ? 'auto' : 'smooth'
+        });
+
+        window.setTimeout(() => {
+            if (scrollRun !== activeAnchorScroll) return;
+            const finalY = getAnchorTargetY(target);
+            if (Math.abs(window.scrollY - finalY) > 4) {
+                instantScrollTo(finalY);
+            }
+            document.documentElement.classList.remove('anchor-gliding');
+        }, behavior === 'auto' || reducedMotion ? 80 : 850);
+    };
     function scrollToAnchor(targetId, behavior = 'smooth') {
         if (!targetId || targetId === '#') return;
         const target = document.querySelector(targetId);
         if (!target) return;
+        if (window.innerWidth <= 768) {
+            mobileScrollToAnchor(target, targetId, behavior);
+            return;
+        }
         const scrollRun = ++activeAnchorScroll;
         activeAnchorTarget = targetId;
         activeAnchorStartedAt = performance.now();

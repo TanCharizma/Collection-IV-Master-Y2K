@@ -46,6 +46,10 @@ html {
     background: var(--bg);
 }
 
+html.anchor-gliding {
+    overflow-anchor: none;
+}
+
 /* Modern Scrollbar Styling */
 ::-webkit-scrollbar {
     width: 6px;
@@ -953,6 +957,7 @@ section {
     display: flex;
     gap: 48px;
     align-items: flex-start;
+    overflow-anchor: none;
 }
 
 .portfolio-column {
@@ -960,6 +965,7 @@ section {
     display: flex;
     gap: 16px;
     align-items: flex-start;
+    overflow-anchor: none;
 }
 
 .masonry-col {
@@ -967,6 +973,7 @@ section {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    overflow-anchor: none;
 }
 
 .full-grid img { 

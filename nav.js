@@ -224,6 +224,32 @@
         const run = () => requestAnimationFrame(() => requestAnimationFrame(callback));
         delay > 0 ? setTimeout(run, delay) : run();
     };
+    let layoutStabilizeRun = 0;
+    const runAfterLayoutStabilizes = (callback, maxWait = 1400) => {
+        const runId = ++layoutStabilizeRun;
+        const startTime = performance.now();
+        let lastHeight = document.documentElement.scrollHeight;
+        let stableFrames = 0;
+        const check = () => {
+            if (runId !== layoutStabilizeRun) return;
+
+            const currentHeight = document.documentElement.scrollHeight;
+            if (Math.abs(currentHeight - lastHeight) < 2) {
+                stableFrames++;
+            } else {
+                stableFrames = 0;
+                lastHeight = currentHeight;
+            }
+
+            if ((performance.now() - startTime > 240 && stableFrames >= 10) || performance.now() - startTime > maxWait) {
+                callback();
+                return;
+            }
+
+            requestAnimationFrame(check);
+        };
+        requestAnimationFrame(check);
+    };
     let activeAnchorScroll = 0;
     let pendingAnchorTimer = 0;
     let pendingAnchorRafOne = 0;
@@ -237,10 +263,12 @@
         activeAnchorCleanup = null;
     };
     const clearPendingAnchorGlide = () => {
+        layoutStabilizeRun++;
         if (pendingAnchorTimer) clearTimeout(pendingAnchorTimer);
         if (pendingAnchorRafOne) cancelAnimationFrame(pendingAnchorRafOne);
         if (pendingAnchorRafTwo) cancelAnimationFrame(pendingAnchorRafTwo);
         cleanupActiveAnchorListeners();
+        document.documentElement.classList.remove('anchor-gliding');
         pendingAnchorTimer = 0;
         pendingAnchorRafOne = 0;
         pendingAnchorRafTwo = 0;
@@ -252,15 +280,18 @@
         const scrollRun = ++activeAnchorScroll;
         activeAnchorTarget = targetId;
         activeAnchorStartedAt = performance.now();
+        document.documentElement.classList.add('anchor-gliding');
         history.replaceState(null, null, targetId);
         if (behavior === 'auto' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             instantScrollTo(getAnchorTargetY(target));
+            document.documentElement.classList.remove('anchor-gliding');
             return;
         }
         forceInstantScrollBehavior();
         const restoreScrollBehavior = () => {
             if (scrollRun !== activeAnchorScroll) return;
             cleanupActiveAnchorListeners();
+            document.documentElement.classList.remove('anchor-gliding');
             restoreInstantScrollBehavior();
         };
         let isUserScrolling = false;
@@ -404,6 +435,10 @@
         e.stopImmediatePropagation();
         const wasMenuOpen = navElement.classList.contains('nav-open');
         if (wasMenuOpen) closeMobileMenu();
+        if (wasMenuOpen && window.innerWidth <= 768) {
+            runAfterLayoutStabilizes(() => glideToAnchor(targetId, 80), 1200);
+            return;
+        }
         glideToAnchor(targetId, wasMenuOpen ? 320 : 0);
     }, true);
 
@@ -514,6 +549,11 @@
         window.addEventListener('load', () => {
             const targetHash = pendingAnchor || window.location.hash;
             if (targetHash) {
+                const isCrossPageMobileAnchor = window.innerWidth <= 768 && (isInternalNav || pendingAnchor);
+                if (isCrossPageMobileAnchor) {
+                    runAfterLayoutStabilizes(() => glideToAnchor(targetHash, 80));
+                    return;
+                }
                 glideToAnchor(targetHash, isInternalNav || pendingAnchor ? 420 : 160);
             }
         }, { once: true });

@@ -2097,10 +2097,10 @@ footer {
     }
     .hero-content {
         z-index: 3;
-        width: calc(100% - 48px);
+        width: calc(100% - 44px);
         margin-left: 0;
         margin-bottom: 14vh;
-        padding: 14px 18px;
+        padding: 16px 20px;
         border-radius: 24px;
     }
     .hero-marquee {
@@ -2121,23 +2121,23 @@ footer {
 
     h1 { font-size: 40px; line-height: 1; letter-spacing: 0.02em; text-shadow: 3px 3px 0 var(--text); }
     .hero-content h1 {
-        font-size: clamp(38px, 11vw, 48px);
+        font-size: clamp(42px, 12vw, 54px);
         letter-spacing: -0.05em;
         text-shadow: 2px 2px 0 var(--black), 3px 3px 0 var(--gold), -1px 0 0 rgba(189, 252, 255, 0.75);
     }
-    .hero-tagline { font-size: 10px; letter-spacing: 0.22em; margin-top: 18px; }
+    .hero-tagline { font-size: 11px; letter-spacing: 0.22em; margin-top: 18px; }
     .hero-tagline::before { top: -10px; width: 32px; }
     .page-header { font-size: 32px; margin-bottom: 32px; } /* Scales down subpage titles */
     
     .btn-book { padding: 8px 16px; font-size: 12px; }
     
-    .hero-btns { flex-direction: column; gap: 10px; margin-top: 20px; max-width: 252px; }
+    .hero-btns { flex-direction: column; gap: 10px; margin-top: 22px; max-width: 276px; }
     .hero-btns .btn-primary,
     .hero-btns .btn-secondary {
         width: 100%;
         justify-content: center;
     }
-    .btn-primary, .btn-secondary { padding: 10px 18px 10px 24px; font-size: 10px; letter-spacing: 0.16em; }
+    .btn-primary, .btn-secondary { padding: 12px 20px 12px 26px; font-size: 11px; letter-spacing: 0.16em; }
 
     section { padding: 48px 0; } /* Tighter vertical rhythm */
     .about-page > section:first-of-type,

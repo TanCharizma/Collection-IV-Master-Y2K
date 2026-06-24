@@ -625,10 +625,32 @@
             const el = document.getElementById(id);
             if (el) el.innerHTML = value;
         };
+        const injectParagraphs = (id, enParagraphs = [], thParagraphs = []) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.innerHTML = '';
+            enParagraphs.forEach(text => {
+                if (!text) return;
+                const paragraph = document.createElement('p');
+                paragraph.lang = 'en';
+                paragraph.textContent = text;
+                el.appendChild(paragraph);
+            });
+            thParagraphs.forEach(text => {
+                if (!text) return;
+                const paragraph = document.createElement('p');
+                paragraph.lang = 'th';
+                paragraph.textContent = text;
+                el.appendChild(paragraph);
+            });
+        };
 
         inject('clientNameHero', window.CLIENT_CONFIG.name);
         injectHTML('taglineEn', window.CLIENT_CONFIG.taglineEn);
         injectHTML('taglineTh', window.CLIENT_CONFIG.taglineTh);
+        injectParagraphs('aboutBio', window.CLIENT_CONFIG.aboutBioEn, window.CLIENT_CONFIG.aboutBioTh);
+        inject('manifestoEn', window.CLIENT_CONFIG.manifestoEn);
+        inject('manifestoTh', window.CLIENT_CONFIG.manifestoTh);
         
         if (window.CLIENT_CONFIG.measurements) {
             inject('val-height', window.CLIENT_CONFIG.measurements.height);

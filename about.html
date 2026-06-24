@@ -61,15 +61,8 @@
                 </h2>
                 <div class="split-layout" style="text-align: left;">
                     <img src="image/about/01.webp" alt="Portrait" class="reveal" loading="lazy">
-                    <div class="bio reveal delay-1">
-                        <p lang="en">A sharp, image-led portfolio for models and creatives with a distinct visual point of view.</p>
-                        <p lang="th">พอร์ตโฟลิโอที่เน้นภาพลักษณ์ชัดเจน สำหรับนางแบบและครีเอทีฟที่มีมุมมองเฉพาะตัว</p>
-
-                        <p lang="en">Replace this demo biography with the client’s background, markets, experience, and creative direction.</p>
-                        <p lang="th">แทนที่ตัวอย่างนี้ด้วยประวัติของลูกค้า ตลาดที่ทำงาน ประสบการณ์ และแนวทางครีเอทีฟ</p>
-                            
-                        <p lang="en">Keep the copy concise, confident, and useful for agencies, brands, and direct bookings.</p>
-                        <p lang="th">เขียนให้กระชับ มั่นใจ และเป็นประโยชน์สำหรับเอเจนซี่ แบรนด์ และการจองโดยตรง</p>
+                    <div class="bio reveal delay-1" id="aboutBio">
+                        <!-- Populated from config.js for fast client delivery -->
                     </div>
                 </div>
             </div>
@@ -103,8 +96,8 @@
         <div style="grid-column: span 12;">
             <div class="manifesto-card reveal" style="padding: 96px; border: 1px solid #eee;">
                 <p class="editorial-quote">
-                    <span lang="en">[Client manifesto placeholder. Replace with a short line that captures their presence, process, or point of view.]</span>
-                    <span lang="th">[พื้นที่ตัวอย่างสำหรับแนวคิดของลูกค้า ใส่ประโยคสั้นๆ ที่สะท้อนตัวตน วิธีทำงาน หรือมุมมอง]</span>
+                    <span lang="en" id="manifestoEn"></span>
+                    <span lang="th" id="manifestoTh"></span>
                 </p>
             </div>
             

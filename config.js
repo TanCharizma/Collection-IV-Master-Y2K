@@ -16,6 +16,21 @@ window.CLIENT_CONFIG = {
     footerDescEn: "International model and creative director based in Bangkok, specializing in high-end editorial and commercial campaigns.",
     footerDescTh: "นางแบบและครีเอทีฟไดเรกเตอร์ระดับนานาชาติที่ประจำอยู่ในกรุงเทพฯ เชี่ยวชาญด้านงานถ่ายแบบนิตยสารและโฆษณาระดับไฮเอนด์",
 
+    // 3.5 About Page Copy
+    // Replace these paragraphs for each buyer. Add or remove lines as needed.
+    aboutBioEn: [
+        "A sharp, image-led portfolio for models and creatives with a distinct visual point of view.",
+        "Replace this demo biography with the client’s background, markets, experience, and creative direction.",
+        "Keep the copy concise, confident, and useful for agencies, brands, and direct bookings."
+    ],
+    aboutBioTh: [
+        "พอร์ตโฟลิโอที่เน้นภาพลักษณ์ชัดเจน สำหรับนางแบบและครีเอทีฟที่มีมุมมองเฉพาะตัว",
+        "แทนที่ตัวอย่างนี้ด้วยประวัติของลูกค้า ตลาดที่ทำงาน ประสบการณ์ และแนวทางครีเอทีฟ",
+        "เขียนให้กระชับ มั่นใจ และเป็นประโยชน์สำหรับเอเจนซี่ แบรนด์ และการจองโดยตรง"
+    ],
+    manifestoEn: "[Client manifesto placeholder. Replace with a short line that captures their presence, process, or point of view.]",
+    manifestoTh: "[พื้นที่ตัวอย่างสำหรับแนวคิดของลูกค้า ใส่ประโยคสั้นๆ ที่สะท้อนตัวตน วิธีทำงาน หรือมุมมอง]",
+
     // 4. Measurements
     measurements: {
         height: "179",

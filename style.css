@@ -2121,7 +2121,7 @@ footer {
 
     h1 { font-size: 40px; line-height: 1; letter-spacing: 0.02em; text-shadow: 3px 3px 0 var(--text); }
     .hero-content h1 {
-        font-size: clamp(42px, 12vw, 54px);
+        font-size: clamp(45px, 12.8vw, 58px);
         letter-spacing: -0.05em;
         text-shadow: 2px 2px 0 var(--black), 3px 3px 0 var(--gold), -1px 0 0 rgba(189, 252, 255, 0.75);
     }

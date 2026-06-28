@@ -300,13 +300,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let scrollLockState = null;
     const lockScroll = () => {
         if (scrollLockState) return;
-        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
         const body = document.body;
         const root = document.documentElement;
         scrollLockState = {
             scrollY: window.scrollY,
             rootOverflow: root.style.overflow,
             rootScrollBehavior: root.style.scrollBehavior,
+            rootScrollbarGutter: root.style.scrollbarGutter,
+            rootHadScrollLocked: root.classList.contains('scroll-locked'),
+            bodyHadScrollLocked: body.classList.contains('scroll-locked'),
             bodyPosition: body.style.position,
             bodyTop: body.style.top,
             bodyLeft: body.style.left,
@@ -315,15 +317,18 @@ document.addEventListener('DOMContentLoaded', () => {
             bodyOverflow: body.style.overflow,
             bodyPaddingRight: body.style.paddingRight
         };
+        root.classList.add('scroll-locked');
+        body.classList.add('scroll-locked');
         root.style.overflow = 'hidden';
         root.style.scrollBehavior = 'auto';
+        root.style.scrollbarGutter = 'auto';
         body.style.position = 'fixed';
         body.style.top = `-${scrollLockState.scrollY}px`;
         body.style.left = '0';
         body.style.right = '0';
         body.style.width = '100%';
         body.style.overflow = 'hidden';
-        body.style.paddingRight = scrollbarWidth > 0 ? `${scrollbarWidth}px` : '';
+        body.style.paddingRight = '';
     };
     const unlockScroll = () => {
         if (!scrollLockState) return;
@@ -331,8 +336,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const root = document.documentElement;
         const scrollY = scrollLockState.scrollY;
         const rootScrollBehavior = scrollLockState.rootScrollBehavior;
+        const rootScrollbarGutter = scrollLockState.rootScrollbarGutter;
+        const rootHadScrollLocked = scrollLockState.rootHadScrollLocked;
+        const bodyHadScrollLocked = scrollLockState.bodyHadScrollLocked;
         root.style.overflow = scrollLockState.rootOverflow;
         root.style.scrollBehavior = 'auto';
+        root.style.scrollbarGutter = rootScrollbarGutter;
+        if (!rootHadScrollLocked) root.classList.remove('scroll-locked');
+        if (!bodyHadScrollLocked) body.classList.remove('scroll-locked');
         body.style.position = scrollLockState.bodyPosition;
         body.style.top = scrollLockState.bodyTop;
         body.style.left = scrollLockState.bodyLeft;

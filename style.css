@@ -69,11 +69,18 @@ html.anchor-gliding {
 }
 
 /* Scroll Lock Engine */
-html.scroll-locked {
+html.scroll-locked,
+body.scroll-locked {
+    scrollbar-gutter: auto;
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
 }
-html.scroll-locked::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
+html.scroll-locked::-webkit-scrollbar,
+body.scroll-locked::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
 
 body {
     overflow-x: hidden;
